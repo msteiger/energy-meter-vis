@@ -1,0 +1,22 @@
+<button
+  #prevButton
+  mat-stroked-button color="primary"
+  [disabled]="!prevValue"
+  [title]="prevValue"
+  (click)="gotoValue(-1)">
+  <mat-icon>arrow_back</mat-icon>Prev
+</button>
+<input
+  #currentInput
+  readonly class="mat-stroked-button"
+  [value]="currentValue">
+<button
+  #nextButton
+  mat-stroked-button
+  color="primary"
+  [disabled]="!nextValue"
+  [title]="nextValue"
+  (click)="gotoValue(+1)">
+  Next<mat-icon>arrow_forward</mat-icon>
+</button>
+

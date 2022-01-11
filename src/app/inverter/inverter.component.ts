@@ -1,0 +1,61 @@
+import {AfterContentInit, AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
+import {DataServiceMock, MeasurementData} from "../data-service-mock.service";
+import {ChartViewComponent, TimeFrame} from "../chart-view/chart-view.component";
+import {zip} from "rxjs";
+
+@Component({
+  selector: 'app-inverter',
+  templateUrl: './inverter.component.html',
+  styleUrls: ['./inverter.component.css']
+})
+export class InverterComponent implements OnInit, AfterContentInit, AfterViewInit  {
+
+  @ViewChild(ChartViewComponent) private chartView!: ChartViewComponent;
+
+  constructor(private dataService: DataServiceMock) {
+
+  }
+
+  error?: string;
+  loading: boolean = true
+  currentDate = "2021-09-26";
+  prevDate: any;
+  nextDate: any;
+
+  ngAfterViewInit(): void {
+
+    this.chartView.colors = ['#dada15'];
+
+    this.gotoDate(0, this.currentDate);
+  }
+
+  ngAfterContentInit() {
+  }
+
+  ngOnInit() {
+  }
+
+  gotoDate(delta: number, day?: string) {
+    if (!day) {
+      return;
+    }
+
+//    this.loading = true;
+
+    const data = this.dataService.getDailyInverter(day);
+    data.subscribe({
+      next: value => this.updateView(value),
+      error: error => this.error = error.statusText + " (" + error.status + ") - " + error.error,
+      complete: () => this.loading = false
+    });
+  }
+
+  private updateView(data?: MeasurementData) {
+    if (data) {
+      this.chartView.setData(data);
+      this.currentDate = data.current;
+      this.nextDate = data.next;
+      this.prevDate = data.prev;
+    }
+  }
+}

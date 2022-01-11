@@ -1,0 +1,26 @@
+<!-- Toolbar -->
+<div class="toolbar" role="banner">
+  <div class="spacer"></div>
+  <span>Energy Meter</span>
+  <div class="spacer"></div>
+</div>
+
+<div class="content" role="main">
+
+  <nav mat-tab-nav-bar>
+    <a mat-tab-link *ngFor="let link of links"
+       (click)="activeLink = link"
+       [routerLink]="link.id"
+       [active]="activeLink == link">
+      {{link.name}}
+    </a>
+  </nav>
+
+  <router-outlet></router-outlet>
+
+  <!-- Footer -->
+  <!--footer class="footer">
+      Love Angular?&nbsp;
+  </footer-->
+
+</div>

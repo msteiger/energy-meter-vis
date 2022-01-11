@@ -1,0 +1,10 @@
+
+<app-banner *ngIf="error">{{error}}</app-banner>
+
+<div *ngIf="!error">
+  <mat-spinner *ngIf="loading"></mat-spinner>
+  <div [hidden]="loading">
+    <app-chart-view></app-chart-view>
+  </div>
+</div>
+

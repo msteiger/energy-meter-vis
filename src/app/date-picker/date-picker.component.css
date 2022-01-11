@@ -1,0 +1,13 @@
+
+button {
+  width: 86px
+}
+
+input {
+  cursor: default;
+  color:black;
+}
+
+input::selection {
+  color:black;
+}
