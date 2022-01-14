@@ -15,7 +15,9 @@ import { MatTabsModule } from "@angular/material/tabs";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { MatIconModule } from "@angular/material/icon";
 import { MatButtonModule } from '@angular/material/button';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatInputModule } from "@angular/material/input";
+import { RangePickerComponent } from './range-picker/range-picker.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +27,8 @@ import { MatInputModule } from "@angular/material/input";
     ElectricityComponent,
     BannerComponent,
     InverterComponent,
-    DatePickerComponent
+    DatePickerComponent,
+    RangePickerComponent
   ],
   imports: [
     BrowserModule,
@@ -36,6 +39,7 @@ import { MatInputModule } from "@angular/material/input";
     MatProgressSpinnerModule,
     MatIconModule,
     MatButtonModule,
+    MatButtonToggleModule,
     MatInputModule
   ],
   providers: [],

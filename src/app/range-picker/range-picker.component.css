@@ -1,0 +1,12 @@
+
+button:first-of-type {
+    border-radius: 14px 0 0 14px;
+}
+
+button:last-of-type {
+    border-radius: 0 14px 14px 0;
+}
+
+.mat-button-toggle-checked {
+    background-color: #96c6ff;
+}
