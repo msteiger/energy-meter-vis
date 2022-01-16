@@ -12,7 +12,9 @@
           [nextValue]="nextDate"
           (navigate)="gotoDate($event.delta, $event.value)">
         </app-date-picker>
-        <app-range-picker></app-range-picker>
+        <app-range-picker
+          (pickRange)="pickRange($event.value)">
+        </app-range-picker>
       </div>
       <app-chart-view></app-chart-view>
     </div>

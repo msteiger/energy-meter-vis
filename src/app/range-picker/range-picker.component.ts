@@ -1,4 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, ElementRef, OnInit, ViewChild, SimpleChanges, EventEmitter, Output} from '@angular/core';
+
+export interface RangePickEvent {
+  value: string;
+}
 
 @Component({
   selector: 'app-range-picker',
@@ -7,12 +11,19 @@ import { Component, OnInit } from '@angular/core';
 })
 export class RangePickerComponent implements OnInit {
 
-  constructor() { }
+  public selectedVal: string = 'daily';
 
+  
+  @Output() pickRange: EventEmitter<RangePickEvent> = new EventEmitter();
+
+  
+  constructor() { }
+  
   ngOnInit(): void {
   }
 
-  setDateRange(value: string) {
-    
+  public setDateRange(value: string) {
+    this.selectedVal = value;
+    this.pickRange.emit({ value: value });
   }
 }

@@ -1,7 +1,6 @@
 import {AfterContentInit, AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {DataServiceMock, MeasurementData} from "../data-service-mock.service";
 import {ChartViewComponent, TimeFrame} from "../chart-view/chart-view.component";
-import {zip} from "rxjs";
 
 @Component({
   selector: 'app-inverter',
@@ -33,6 +32,10 @@ export class InverterComponent implements OnInit, AfterContentInit, AfterViewIni
   }
 
   ngOnInit() {
+  }
+
+  pickRange(range: string) {
+    console.log("Range: " + range);
   }
 
   gotoDate(delta: number, day?: string) {

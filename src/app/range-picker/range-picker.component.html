@@ -1,15 +1,19 @@
-<mat-button-toggle-group name="dateRange" aria-label="Date Range">
+
+<mat-button-toggle-group 
+  #group="matButtonToggleGroup" 
+  [value]="selectedVal" 
+  (change)="setDateRange(group.value)">
+
   <mat-button-toggle
-    #dailyButton
     mat-stroked-button
-    title="Daily"
-    (click)="setDateRange('daily')">Daily
+    value="daily">
+    Daily
   </mat-button-toggle>
+  
   <mat-button-toggle
-    #monthlyButton
     mat-stroked-button
-    title="Monthly"
-    id="bla"
-    (click)="setDateRange('monthly')">Monthly
+    value="monthly">
+    Monthly
   </mat-button-toggle>
+
 </mat-button-toggle-group>
