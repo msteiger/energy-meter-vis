@@ -6,13 +6,9 @@
   justify-content: center;
 }
 
-mat-spinner {
-
-}
-
 app-date-picker {
-  align-self:center;
-  margin: 10px
+  margin-left: auto;
+  margin-right: auto;
 }
 
 app-chart-view {
