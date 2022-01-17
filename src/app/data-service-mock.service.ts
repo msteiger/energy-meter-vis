@@ -1,30 +1,7 @@
 import {Injectable} from '@angular/core';
 import {BehaviorSubject, Observable, Subject} from "rxjs";
 import {delay} from "rxjs/operators";
-
-export interface MeasurementData {
-  desc: SensorType,
-  start: number,
-  end: number,
-  current: string,
-  prev?: string,
-  next?: string
-  data: Measurement[]
-}
-
-export interface Measurement {
-  measurements: number,
-  x: number,
-  y: number
-}
-
-export interface SensorType {
-  id: string;
-  name: string,
-  unit: string,
-  min: number,
-  max: number
-}
+import { MeasurementData, SensorType } from './data-service.service';
 
 @Injectable({
   providedIn: 'root'

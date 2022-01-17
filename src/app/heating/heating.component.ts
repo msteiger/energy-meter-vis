@@ -1,7 +1,8 @@
 import {AfterContentInit, AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 
 import 'chartjs-adapter-date-fns';
-import {DataServiceMock, MeasurementData} from "../data-service-mock.service";
+import {DataServiceMock} from "../data-service-mock.service";
+import {MeasurementData} from "../data-service.service"
 import {ChartViewComponent, TimeFrame} from "../chart-view/chart-view.component";
 
 @Component({

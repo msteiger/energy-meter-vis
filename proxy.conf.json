@@ -1,0 +1,8 @@
+{
+  "/data/*": {
+    "target": "http://raspberrypi:9090",
+    "secure": false,
+    "logLevel": "debug",
+    "changeOrigin": true
+  }
+}

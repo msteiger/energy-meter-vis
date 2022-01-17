@@ -2,7 +2,7 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import {BaseChartDirective} from "ng2-charts";
 import {Chart, ChartConfiguration, ChartData, ChartType, Color} from "chart.js";
 import {de} from "date-fns/locale";
-import {MeasurementData} from "../data-service-mock.service";
+import {MeasurementData} from "../data-service.service";
 import {LineHoverPlugin} from "./lineHoverPlugin";
 
 export enum TimeFrame {
@@ -30,7 +30,7 @@ export class ChartViewComponent implements OnInit {
             day: 'yyyy-MM-dd',
             minute: 'HH:mm'
           },
-          tooltipFormat:'hh:mm',
+          tooltipFormat:'HH:mm',
           unit: 'minute'
         },
         adapters: {

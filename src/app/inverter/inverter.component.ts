@@ -1,5 +1,6 @@
 import {AfterContentInit, AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
-import {DataServiceMock, MeasurementData} from "../data-service-mock.service";
+import {DataServiceMock} from "../data-service-mock.service";
+import {DataService, MeasurementData} from "../data-service.service";
 import {ChartViewComponent, TimeFrame} from "../chart-view/chart-view.component";
 
 @Component({
@@ -11,7 +12,7 @@ export class InverterComponent implements OnInit, AfterContentInit, AfterViewIni
 
   @ViewChild(ChartViewComponent) private chartView!: ChartViewComponent;
 
-  constructor(private dataService: DataServiceMock) {
+  constructor(private dataService: DataService) {
 
   }
 

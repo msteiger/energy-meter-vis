@@ -18,6 +18,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatInputModule } from "@angular/material/input";
 import { RangePickerComponent } from './range-picker/range-picker.component';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -40,6 +41,7 @@ import { RangePickerComponent } from './range-picker/range-picker.component';
     MatIconModule,
     MatButtonModule,
     MatButtonToggleModule,
+    HttpClientModule,
     MatInputModule
   ],
   providers: [],
