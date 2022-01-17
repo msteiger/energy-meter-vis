@@ -107,12 +107,14 @@ export class ChartViewComponent implements OnInit {
           label: item.desc.name,
           data: item.data,
           borderWidth: 2,
+          pointBorderWidth: 1,
           pointBorderColor: this.borderColor,
           pointBackgroundColor: this.colors[idx] + this.primaryAlpha,
           hoverBorderColor: this.borderColor,
           borderColor: this.colors[idx] + this.primaryAlpha,
           backgroundColor: this.colors[idx] + this.secondaryAlpha,
-          hoverBackgroundColor: this.colors[idx] + this.primaryAlpha
+          hoverBackgroundColor: this.colors[idx] + this.primaryAlpha,
+          tension: 0.5
       });
     }
   }
