@@ -19,7 +19,7 @@ export class ChartViewComponent implements OnInit {
 
   @ViewChild(BaseChartDirective) chart!: BaseChartDirective;
 
-  public chartOptions: ChartConfiguration['options'] = {
+  public readonly chartOptions: ChartConfiguration['options'] = {
     animation: false,
     responsive: true,
     scales: {
@@ -83,18 +83,23 @@ export class ChartViewComponent implements OnInit {
       this.setTimeframe(frame);
     }
 
-    const min = Math.min(0, ...measurementData.map( obj => obj.desc.min));
-    const max = Math.max(0, ...measurementData.map( obj => obj.desc.max));
-    const sum = measurementData.map(obj => obj.desc.max).reduce((a, b) => a + b, 0);
+    const minX = Math.min(...measurementData.map(obj => obj.start));
+    const maxX = Math.max(...measurementData.map(obj => obj.end));
+
+    const minY = Math.min(0, ...measurementData.map(obj => obj.desc.min));
+    const maxY = Math.max(0, ...measurementData.map(obj => obj.desc.max));
+    const sumY = measurementData.map(obj => obj.desc.max).reduce((a, b) => a + b, 0);
+
+    const yScale = this.chartOptions!.scales!.y!;  // TODO: check why compiler complains
+    const xScale = this.chartOptions!.scales!.x!;  // TODO: check why compiler complains
 
     // @ts-ignore
-    this.chartOptions?.scales?.y?.min = min;
+    yScale.stacked = stacked;  // TODO: check why needs to be forced
+    yScale.min = minY;
+    yScale.max = (stacked) ? sumY / 2 : maxY;
 
-    // @ts-ignore
-    this.chartOptions?.scales?.y?.max = (stacked) ? sum / 2 : max;
-
-    // @ts-ignore
-    this.chartOptions?.scales?.y?.stacked = stacked;
+    xScale.min = minX;
+    xScale.max = maxX;
 
     this.chartData = {
       datasets: []
