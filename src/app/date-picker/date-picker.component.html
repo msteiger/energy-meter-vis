@@ -9,7 +9,13 @@
 <input
   #currentInput
   readonly class="mat-stroked-button"
-  [value]="currentValue">
+  matInput
+  [min]="minCalendarValue"
+  [max]="maxCalendarValue"
+  [value]="currentValue"
+  [matDatepicker]="picker"
+  (dateChange)="pickValue($event)">
+  <mat-datepicker #picker></mat-datepicker>
 <button
   #nextButton
   mat-stroked-button
@@ -20,3 +26,4 @@
   Next<mat-icon>arrow_forward</mat-icon>
 </button>
 
+<mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
