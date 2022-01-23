@@ -24,14 +24,15 @@ export class ChartViewComponent implements OnInit {
     responsive: true,
     scales: {
       x: {
-        type: 'timeseries',
+        type: 'time',
         time: {
           displayFormats: {
             day: 'yyyy-MM-dd',
             minute: 'HH:mm'
           },
           tooltipFormat:'HH:mm',
-          unit: 'minute'
+          unit: 'minute',
+          stepSize: 60
         },
         adapters: {
           date: {
@@ -111,6 +112,7 @@ export class ChartViewComponent implements OnInit {
           fill: (idx == 0) ? 'origin' : '-1',
           label: item.desc.name,
           data: item.data,
+          spanGaps: 900000,
           borderWidth: 2,
           pointBorderWidth: 1,
           pointBorderColor: this.borderColor,
