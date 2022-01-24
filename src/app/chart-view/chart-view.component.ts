@@ -20,7 +20,16 @@ export class ChartViewComponent implements OnInit {
   @ViewChild(BaseChartDirective) chart!: BaseChartDirective;
 
   public readonly chartOptions: ChartConfiguration['options'] = {
-    animation: false,
+//    animation: false,
+  animations: {
+      x: {
+        duration: 500,
+        easing: "linear"
+      },
+      y: {
+        duration: 0
+      }
+    },
     responsive: true,
     scales: {
       x: {
