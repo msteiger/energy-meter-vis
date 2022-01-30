@@ -20,7 +20,7 @@ import { MatInputModule } from "@angular/material/input";
 import { RangePickerComponent } from './range-picker/range-picker.component';
 import { HttpClientModule } from '@angular/common/http';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/core';
+import { MatDateFnsModule } from '@angular/material-date-fns-adapter';
 
 @NgModule({
   declarations: [
@@ -46,7 +46,7 @@ import { MatNativeDateModule } from '@angular/material/core';
     HttpClientModule,
     MatInputModule,
     MatDatepickerModule,
-    MatNativeDateModule
+    MatDateFnsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
