@@ -1,7 +1,6 @@
-import { Component, Input, ElementRef, OnInit, ViewChild, SimpleChanges, EventEmitter, Output } from '@angular/core';
-import { DateFnsAdapter } from '@angular/material-date-fns-adapter';
-import { DateAdapter } from '@angular/material/core';
+import { Component, Input, OnInit, EventEmitter, Output } from '@angular/core';
 import { MatDatepickerInputEvent } from '@angular/material/datepicker';
+import { format } from 'date-fns'
 
 export interface NavigateEvent {
   delta: number;
@@ -30,9 +29,13 @@ export class DatePickerComponent implements OnInit {
   }
 
   pickValue(event: MatDatepickerInputEvent<Date>) {
+
+    //  we get the date in local TZ and just use the local date
+    const isoDate = format(event.value!, "yyyy-MM-dd");
+
     this.navigate.emit({
       delta: 0,
-      value: event.value?.toISOString().substring(0, 10)
+      value: isoDate
     });
   }
 
