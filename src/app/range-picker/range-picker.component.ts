@@ -1,7 +1,8 @@
 import {Component, Input, ElementRef, OnInit, ViewChild, SimpleChanges, EventEmitter, Output} from '@angular/core';
+import { TimeFrame } from '../time-frame';
 
 export interface RangePickEvent {
-  value: string;
+  value: TimeFrame;
 }
 
 @Component({
@@ -11,11 +12,9 @@ export interface RangePickEvent {
 })
 export class RangePickerComponent implements OnInit {
 
-  public selectedVal: string = 'daily';
+  public selectedVal = "DAILY";
 
-  
   @Output() pickRange: EventEmitter<RangePickEvent> = new EventEmitter();
-
   
   constructor() { }
   
@@ -24,6 +23,6 @@ export class RangePickerComponent implements OnInit {
 
   public setDateRange(value: string) {
     this.selectedVal = value;
-    this.pickRange.emit({ value: value });
+    this.pickRange.emit({ value: TimeFrame[value as keyof typeof TimeFrame] });
   }
 }

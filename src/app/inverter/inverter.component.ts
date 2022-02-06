@@ -1,7 +1,8 @@
 import {AfterContentInit, AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {DataServiceMock} from "../data-service-mock.service";
 import {DataService, MeasurementData} from "../data-service.service";
-import {ChartViewComponent, TimeFrame} from "../chart-view/chart-view.component";
+import {ChartViewComponent} from "../chart-view/chart-view.component";
+import { TimeFrame } from '../time-frame';
 
 @Component({
   selector: 'app-inverter',
@@ -18,9 +19,13 @@ export class InverterComponent implements OnInit, AfterContentInit, AfterViewIni
 
   error?: string;
   loading: boolean = true
-  currentDate = "2021-10-11";
-  prevDate: any;
-  nextDate: any;
+
+  savedOtherDate? = "2021-10";
+  currentDate? = "2021-10-11";
+  prevDate?: string;
+  nextDate?: string;
+
+  range: TimeFrame = TimeFrame.DAILY;
 
   ngAfterViewInit(): void {
 
@@ -35,18 +40,24 @@ export class InverterComponent implements OnInit, AfterContentInit, AfterViewIni
   ngOnInit() {
   }
 
-  pickRange(range: string) {
-    console.log("Range: " + range);
-  }
-
-  gotoDate(delta: number, day?: string) {
-    if (!day) {
+  pickRange(range: TimeFrame) {
+    if (range === this.range) {
       return;
     }
 
+    this.range = range;
+    
+    const tmp = this.savedOtherDate;
+    this.savedOtherDate = this.currentDate;
+    this.currentDate = tmp;
+
+    this.gotoDate(0, this.currentDate);
+  }
+
+  gotoDate(delta: number, date?: string) {
 //    this.loading = true;
 
-    const data = this.dataService.getDailyInverter(day);
+    const data = this.dataService.getInverter(this.range, date);
     data.subscribe({
       next: value => this.updateView(value),
       error: error => this.error = error.statusText + " (" + error.status + ") - " + error.error,
@@ -56,7 +67,7 @@ export class InverterComponent implements OnInit, AfterContentInit, AfterViewIni
 
   private updateView(data?: MeasurementData) {
     if (data) {
-      this.chartView.setData(data, TimeFrame.DAILY);
+      this.chartView.setData(data, this.range);
       this.currentDate = data.current;
       this.nextDate = data.next;
       this.prevDate = data.prev;

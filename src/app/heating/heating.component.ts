@@ -3,7 +3,8 @@ import {AfterContentInit, AfterViewInit, Component, ElementRef, OnInit, ViewChil
 import 'chartjs-adapter-date-fns';
 import {DataServiceMock} from "../data-service-mock.service";
 import {MeasurementData} from "../data-service.service"
-import {ChartViewComponent, TimeFrame} from "../chart-view/chart-view.component";
+import {ChartViewComponent} from "../chart-view/chart-view.component";
+import { TimeFrame } from '../time-frame';
 
 @Component({
   selector: 'app-heating',

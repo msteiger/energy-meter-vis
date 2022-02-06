@@ -1,7 +1,8 @@
 import {AfterContentInit, AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {DataServiceMock} from "../data-service-mock.service";
-import {ChartViewComponent, TimeFrame} from "../chart-view/chart-view.component";
+import {ChartViewComponent} from "../chart-view/chart-view.component";
 import {zip} from "rxjs";
+import { TimeFrame } from '../time-frame';
 
 @Component({
   selector: 'app-electricity',

@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {BehaviorSubject, Observable, Subject} from "rxjs";
 import { delay, map, shareReplay } from "rxjs/operators";
+import { TimeFrame } from './time-frame';
 
 export interface MeasurementData {
   desc: SensorType,
@@ -36,16 +37,18 @@ export class DataService {
     //
   }
 
-  public getDailyInverter(day: string): Observable<MeasurementData> {
+  public getInverter(range: TimeFrame, date?: string): Observable<MeasurementData> {
 
     let params = new HttpParams();
     
-    if (day) {
-      params = params.set('date', day);
-    }  
+    if (date) {
+      params = params.set('date', date);
+    }
+
+    const urlPath = TimeFrame[range].toLowerCase();
 
     return this.http
-      .get<MeasurementData>('data/inverter-ac-power/daily', { params: params })
+      .get<MeasurementData>('data/inverter-ac-power/' + urlPath, { params: params })
       .pipe(map(data => data));
   }
 }

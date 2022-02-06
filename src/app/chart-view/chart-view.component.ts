@@ -1,14 +1,9 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {BaseChartDirective} from "ng2-charts";
-import {Chart, ChartConfiguration, ChartData, ChartType, Color} from "chart.js";
-import {de} from "date-fns/locale";
+import {BaseChartDirective } from "ng2-charts";
+import {Chart, ChartConfiguration, ChartData, ChartType, Color, TimeScaleOptions, TimeUnit} from "chart.js";
 import {MeasurementData} from "../data-service.service";
 import {LineHoverPlugin} from "./lineHoverPlugin";
-
-export enum TimeFrame {
-  DAILY,
-  MONTHLY
-}
+import { TimeFrame } from '../time-frame';
 
 @Component({
   selector: 'app-chart-view',
@@ -19,7 +14,7 @@ export class ChartViewComponent implements OnInit {
 
   @ViewChild(BaseChartDirective) chart!: BaseChartDirective;
 
-  public readonly chartOptions: ChartConfiguration['options'] = {
+  public readonly chartOptions: ChartConfiguration['options'] | any = {
 //    animation: false,
   animations: {
       x: {
@@ -36,17 +31,12 @@ export class ChartViewComponent implements OnInit {
         type: 'time',
         time: {
           displayFormats: {
-            day: 'yyyy-MM-dd',
-            minute: 'HH:mm'
+            day: 'd',
+            hour: 'H:mm'
           },
           tooltipFormat:'HH:mm',
-          unit: 'minute',
-          stepSize: 60
-        },
-        adapters: {
-          date: {
-            locale: de
-          }
+          unit: 'hour',
+          stepSize: 1
         },
         stacked: false
       },
@@ -141,7 +131,7 @@ export class ChartViewComponent implements OnInit {
 
     switch (frame) {
       case TimeFrame.DAILY:
-        unit = "minute"
+        unit = "hour"
         tooltipFormat = 'HH:mm'
         this.toleratedGapWidth = 900000;
         break;
@@ -152,9 +142,9 @@ export class ChartViewComponent implements OnInit {
         break;
     }
 
-    const xScale: TimeScaleOptions = this.chartOptions?.scales?.x;
+    const xScale = this.chartOptions?.scales?.x;
 
-    xScale.time.unit = 'day';
+    xScale.time.unit = unit;
     xScale.time.tooltipFormat = tooltipFormat;
   }
 }
