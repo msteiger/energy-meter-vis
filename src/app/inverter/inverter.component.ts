@@ -56,7 +56,7 @@ export class InverterComponent implements OnInit, AfterContentInit, AfterViewIni
 
   private updateView(data?: MeasurementData) {
     if (data) {
-      this.chartView.setData(data);
+      this.chartView.setData(data, TimeFrame.DAILY);
       this.currentDate = data.current;
       this.nextDate = data.next;
       this.prevDate = data.prev;

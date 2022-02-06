@@ -33,7 +33,7 @@ export class HeatingComponent implements OnInit, AfterContentInit {
     let l1 = this.dataService.getMonthlyTemperature("2021-11");
     
     l1.subscribe({
-        next: value => this.chartView.setData(value, TimeFrame.DAILY),
+        next: value => this.chartView.setData(value, TimeFrame.MONTHLY),
         error: error => this.error = error.statusText + " (" + error.status + ") - " + error.error,
         complete: () => this.loading = false
       });

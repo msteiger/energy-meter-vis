@@ -71,6 +71,8 @@ export class ChartViewComponent implements OnInit {
 
   colors = ['#20e020', '#f0e020', '#f04040'];
 
+  private toleratedGapWidth = 0;
+
   private primaryAlpha: string = 'ff';
   private secondaryAlpha: string = 'b0';
   private borderColor: Color = '#A0A0A0'
@@ -83,15 +85,13 @@ export class ChartViewComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  public setData(measurementData?: MeasurementData, frame?: TimeFrame) {
-    this.setDataArray(measurementData? [measurementData] : [], frame);
+  public setData(measurementData: MeasurementData, frame: TimeFrame) {
+    this.setDataArray([measurementData], frame);
   }
 
-  public setDataArray(measurementData: MeasurementData[], frame?: TimeFrame, stacked?: boolean) {
+  public setDataArray(measurementData: MeasurementData[], frame: TimeFrame, stacked?: boolean) {
 
-    if (frame) {
-      this.setTimeframe(frame);
-    }
+    this.setTimeframe(frame);
 
     const minX = Math.min(...measurementData.map(obj => obj.start));
     const maxX = Math.max(...measurementData.map(obj => obj.end));
@@ -121,7 +121,7 @@ export class ChartViewComponent implements OnInit {
           fill: (idx == 0) ? 'origin' : '-1',
           label: item.desc.name,
           data: item.data,
-          spanGaps: 900000,
+          spanGaps: this.toleratedGapWidth,
           borderWidth: 2,
           pointBorderWidth: 1,
           pointBorderColor: this.borderColor,
@@ -141,18 +141,20 @@ export class ChartViewComponent implements OnInit {
 
     switch (frame) {
       case TimeFrame.DAILY:
-        unit = "MINUTE"
+        unit = "minute"
         tooltipFormat = 'HH:mm'
+        this.toleratedGapWidth = 900000;
         break;
       case TimeFrame.MONTHLY:
-        unit = "DAY"
-        tooltipFormat = 'YYYY-MM-dd'
+        unit = "day"
+        tooltipFormat = 'yyyy-MM-dd'
+        this.toleratedGapWidth = 24 * 60 * 60 * 1000;
         break;
     }
 
-    // @ts-ignore
-    this.chartOptions.scales.x.time.unit = unit;
-    // @ts-ignore
-    this.chartOptions?.scales.x.time.tooltipFormat = tooltipFormat;
+    const xScale: TimeScaleOptions = this.chartOptions?.scales?.x;
+
+    xScale.time.unit = 'day';
+    xScale.time.tooltipFormat = tooltipFormat;
   }
 }
