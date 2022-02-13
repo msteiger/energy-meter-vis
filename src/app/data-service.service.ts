@@ -38,6 +38,20 @@ export class DataService {
   }
 
   public getInverter(range: TimeFrame, date?: string): Observable<MeasurementData> {
+    return this.getData('inverter-ac-power', range, date);
+  }
+
+  public getEmPowerIn(range: TimeFrame, date: string, idx?: number) {
+    let id = 'em-power-in';
+    
+    if (idx && idx >= 1 && idx <= 3) {
+      id += '-l' + idx;
+    }
+
+    return this.getData(id, range, date);
+  }
+
+  private getData(id: string, range: TimeFrame, date?: string): Observable<MeasurementData> {
 
     let params = new HttpParams();
     
@@ -45,11 +59,15 @@ export class DataService {
       params = params.set('date', date);
     }
 
-    const urlPath = TimeFrame[range].toLowerCase();
+    const root = 'data'
+    const frame = TimeFrame[range].toLowerCase();
+
+    const url = root + '/' + id + '/' + frame;
 
     return this.http
-      .get<MeasurementData>('data/inverter-ac-power/' + urlPath, { params: params })
+      .get<MeasurementData>(url, { params: params })
       .pipe(map(data => data));
   }
+
 }
 

@@ -20,8 +20,8 @@ export class InverterComponent implements OnInit, AfterContentInit, AfterViewIni
   error?: string;
   loading: boolean = true
 
-  savedOtherDate? = "2021-10";
-  currentDate? = "2021-10-11";
+  savedOtherDate? = "2022-01";
+  currentDate? = "2022-01-21";
   prevDate?: string;
   nextDate?: string;
 
