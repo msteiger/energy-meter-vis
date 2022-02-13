@@ -22,15 +22,14 @@ export class ElectricityComponent implements OnInit, AfterContentInit, AfterView
 
   ngAfterViewInit(): void {
 
-    this.chartView.colors = ['#71bad5', '#6799ec', '#ee80a6'];
+    this.chartView.colors = ['#dada15', '#71bad5', '#6799ec', '#ee80a6'];
 
     const day = "2022-02-07";
-    let l1 = this.dataService.getEmPowerIn(TimeFrame.DAILY, day, 1);
-    let l2 = this.dataService.getEmPowerIn(TimeFrame.DAILY, day, 2);
-    let l3 = this.dataService.getEmPowerIn(TimeFrame.DAILY, day, 3);
+    let lOut = this.dataService.getEmPowerOut(TimeFrame.DAILY, day);
+    let lIn = this.dataService.getEmPowerIn(TimeFrame.DAILY, day);
 
-    zip(l1, l2, l3).subscribe({
-        next: value => this.chartView.setDataArray(value, TimeFrame.DAILY, true),
+    zip(lOut, lIn).subscribe({
+        next: value => this.chartView.setDataArray(value, TimeFrame.DAILY, false),
         error: error => this.error = error.statusText + " (" + error.status + ") - " + error.error,
         complete: () => this.loading = false
       });

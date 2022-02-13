@@ -57,8 +57,8 @@ export class InverterComponent implements OnInit, AfterContentInit, AfterViewIni
   gotoDate(delta: number, date?: string) {
 //    this.loading = true;
 
-    const data = this.dataService.getInverter(this.range, date);
-    data.subscribe({
+    const invData$ = this.dataService.getInverter(this.range, date);
+    invData$.subscribe({
       next: value => this.updateView(value),
       error: error => this.error = error.statusText + " (" + error.status + ") - " + error.error,
       complete: () => this.loading = false

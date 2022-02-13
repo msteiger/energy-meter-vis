@@ -41,8 +41,26 @@ export class DataService {
     return this.getData('inverter-ac-power', range, date);
   }
 
-  public getEmPowerIn(range: TimeFrame, date: string, idx?: number) {
-    let id = 'em-power-in';
+  public getEmPowerOut(range: TimeFrame, date: string): Observable<MeasurementData> {
+    return this.getEmPower(false, range, date).pipe(map(data => this.negateValues(data)));
+  }
+
+  private negateValues(obj: MeasurementData): MeasurementData {
+    obj.data.forEach(msmt => msmt.y = - msmt.y);
+    const tmp = obj.desc.min;
+    obj.desc.min = - obj.desc.max;
+    obj.desc.max = tmp;
+    return obj;
+  }
+  
+  public getEmPowerIn(range: TimeFrame, date: string, idx?: number): Observable<MeasurementData> {
+    return this.getEmPower(true, range, date, idx);
+  }
+
+  public getEmPower(isIn: boolean, range: TimeFrame, date: string, idx?: number) {
+    let id = 'em-power-';
+
+    id += isIn ? 'in' : 'out';
     
     if (idx && idx >= 1 && idx <= 3) {
       id += '-l' + idx;
