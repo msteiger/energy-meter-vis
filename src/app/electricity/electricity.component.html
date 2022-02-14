@@ -4,7 +4,7 @@
 <div *ngIf="!error">
   <mat-spinner *ngIf="loading"></mat-spinner>
   <div [hidden]="loading">
-    <app-chart-view></app-chart-view>
+    <app-chart-view #electricChart [colors]="electricColors"></app-chart-view>
   </div>
 </div>
 

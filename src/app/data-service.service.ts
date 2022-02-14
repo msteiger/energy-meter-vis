@@ -41,23 +41,31 @@ export class DataService {
     return this.getData('inverter-ac-power', range, date);
   }
 
-  public getEmPowerOut(range: TimeFrame, date: string): Observable<MeasurementData> {
+  public getEmPowerOut(range: TimeFrame, date?: string): Observable<MeasurementData> {
     return this.getEmPower(false, range, date).pipe(map(data => this.negateValues(data)));
   }
 
+  private avgToSum(obj: MeasurementData): MeasurementData {
+    obj.data.forEach(msmt => { 
+      msmt.y *= msmt.measurements / 60;
+    });
+    obj.desc.max *= 24;
+    return obj;
+  }
+
   private negateValues(obj: MeasurementData): MeasurementData {
-    obj.data.forEach(msmt => msmt.y = - msmt.y);
+    obj.data.forEach(msmt => { if (msmt.y != 0) msmt.y = - msmt.y; });  // don't negate zero values to avoid ugly "-0"
     const tmp = obj.desc.min;
     obj.desc.min = - obj.desc.max;
     obj.desc.max = tmp;
     return obj;
   }
   
-  public getEmPowerIn(range: TimeFrame, date: string, idx?: number): Observable<MeasurementData> {
+  public getEmPowerIn(range: TimeFrame, date?: string, idx?: number): Observable<MeasurementData> {
     return this.getEmPower(true, range, date, idx);
   }
 
-  public getEmPower(isIn: boolean, range: TimeFrame, date: string, idx?: number) {
+  public getEmPower(isIn: boolean, range: TimeFrame, date?: string, idx?: number) {
     let id = 'em-power-';
 
     id += isIn ? 'in' : 'out';
@@ -82,10 +90,14 @@ export class DataService {
 
     const url = root + '/' + id + '/' + frame;
 
-    return this.http
-      .get<MeasurementData>(url, { params: params })
-      .pipe(map(data => data));
-  }
+    let data$ = this.http
+      .get<MeasurementData>(url, { params: params });
 
+    if (range == TimeFrame.MONTHLY) {
+      data$ = data$.pipe(map(this.avgToSum));
+    }
+
+    return data$;
+  }
 }
 

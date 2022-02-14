@@ -11,7 +11,7 @@ import { TimeFrame } from '../time-frame';
 })
 export class ElectricityComponent implements OnInit, AfterContentInit, AfterViewInit {
 
-  @ViewChild(ChartViewComponent) private chartView!: ChartViewComponent;
+  @ViewChild('electricChart') private chartView!: ChartViewComponent;
 
   constructor(private dataService: DataService) {
 
@@ -19,10 +19,9 @@ export class ElectricityComponent implements OnInit, AfterContentInit, AfterView
 
   error?: string;
   loading: boolean = true
+  electricColors = ['#dada15', '#71bad5', '#6799ec', '#ee80a6'];
 
   ngAfterViewInit(): void {
-
-    this.chartView.colors = ['#dada15', '#71bad5', '#6799ec', '#ee80a6'];
 
     const day = "2022-02-07";
     let lOut = this.dataService.getEmPowerOut(TimeFrame.DAILY, day);

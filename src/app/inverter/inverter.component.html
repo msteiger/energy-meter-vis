@@ -16,7 +16,11 @@
           (pickRange)="pickRange($event.value)">
         </app-range-picker>
       </div>
-      <app-chart-view></app-chart-view>
+
+      <app-chart-view #inverterChart [colors]="inverterColors"></app-chart-view>
+
+      <app-chart-view #electricChart [colors]="electricColors"></app-chart-view>
+
     </div>
   </div>
 </div>

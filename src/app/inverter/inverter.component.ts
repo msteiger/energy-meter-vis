@@ -3,6 +3,7 @@ import {DataServiceMock} from "../data-service-mock.service";
 import {DataService, MeasurementData} from "../data-service.service";
 import {ChartViewComponent} from "../chart-view/chart-view.component";
 import { TimeFrame } from '../time-frame';
+import {zip} from "rxjs";
 
 @Component({
   selector: 'app-inverter',
@@ -11,7 +12,8 @@ import { TimeFrame } from '../time-frame';
 })
 export class InverterComponent implements OnInit, AfterContentInit, AfterViewInit  {
 
-  @ViewChild(ChartViewComponent) private chartView!: ChartViewComponent;
+  @ViewChild('inverterChart') private inverterChartView!: ChartViewComponent;
+  @ViewChild('electricChart') private electricChartView!: ChartViewComponent;
 
   constructor(private dataService: DataService) {
 
@@ -20,17 +22,17 @@ export class InverterComponent implements OnInit, AfterContentInit, AfterViewIni
   error?: string;
   loading: boolean = true
 
-  savedOtherDate? = "2022-01";
-  currentDate? = "2022-01-21";
+  savedOtherDate? = "2022-02";
+  currentDate? = "2022-02-13";
   prevDate?: string;
   nextDate?: string;
 
   range: TimeFrame = TimeFrame.DAILY;
 
+  electricColors = ['#dada15', '#71bad5', '#6799ec', '#ee80a6'];
+  inverterColors = ['#dada15'];
+
   ngAfterViewInit(): void {
-
-    this.chartView.colors = ['#dada15'];
-
     this.gotoDate(0, this.currentDate);
   }
 
@@ -55,6 +57,11 @@ export class InverterComponent implements OnInit, AfterContentInit, AfterViewIni
   }
 
   gotoDate(delta: number, date?: string) {
+    this.loadInverterData(date);
+    this.loadElectricData(date);
+  }
+
+  private loadInverterData(date?: string) {
 //    this.loading = true;
 
     const invData$ = this.dataService.getInverter(this.range, date);
@@ -65,9 +72,21 @@ export class InverterComponent implements OnInit, AfterContentInit, AfterViewIni
     });
   }
 
+  private loadElectricData(date?: string) {
+
+    let lOut$ = this.dataService.getEmPowerOut(this.range, date);
+    let lIn$ = this.dataService.getEmPowerIn(this.range, date);
+
+    zip(lOut$, lIn$).subscribe({
+        next: value => this.electricChartView.setDataArray(value, this.range, false),
+        error: error => this.error = error.statusText + " (" + error.status + ") - " + error.error,
+        complete: () => this.loading = false
+      });
+  }
+
   private updateView(data?: MeasurementData) {
     if (data) {
-      this.chartView.setData(data, this.range);
+      this.inverterChartView.setData(data, this.range);
       this.currentDate = data.current;
       this.nextDate = data.next;
       this.prevDate = data.prev;

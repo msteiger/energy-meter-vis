@@ -1,6 +1,6 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {BaseChartDirective } from "ng2-charts";
-import {Chart, ChartConfiguration, ChartData, ChartType, Color, TimeScaleOptions, TimeUnit} from "chart.js";
+import {Chart, ChartConfiguration, ChartData, ChartType, Color, TimeScaleOptions, TimeUnit, Tooltip, TooltipItem} from "chart.js";
 import {MeasurementData} from "../data-service.service";
 import {LineHoverPlugin} from "./lineHoverPlugin";
 import { TimeFrame } from '../time-frame';
@@ -16,7 +16,7 @@ export class ChartViewComponent implements OnInit {
 
   public readonly chartOptions: ChartConfiguration['options'] | any = {
 //    animation: false,
-  animations: {
+    animations: {
       x: {
         duration: 500,
         easing: "linear"
@@ -59,7 +59,7 @@ export class ChartViewComponent implements OnInit {
   chartType: ChartType = 'line';
   chartData?: ChartData<'line'>;
 
-  colors = ['#20e020', '#f0e020', '#f04040'];
+  @Input('colors') colors = ['#20e020', '#f0e020', '#f04040'];
 
   private toleratedGapWidth = 0;
 
