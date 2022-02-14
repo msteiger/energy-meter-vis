@@ -96,7 +96,7 @@ export class ChartViewComponent implements OnInit {
     // @ts-ignore
     yScale.stacked = stacked;  // TODO: check why needs to be forced
     yScale.min = minY;
-    yScale.max = (stacked) ? sumY / 2 : maxY;
+    yScale.max = (stacked) ? sumY : maxY;
 
     xScale.min = minX;
     xScale.max = maxX;

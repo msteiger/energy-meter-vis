@@ -50,6 +50,7 @@ export class DataService {
       msmt.y *= msmt.measurements / 60;
     });
     obj.desc.max *= 24;
+    obj.desc.max *= 0.25; // scale down for prettier display
     return obj;
   }
 
@@ -62,7 +63,10 @@ export class DataService {
   }
   
   public getEmPowerIn(range: TimeFrame, date?: string, idx?: number): Observable<MeasurementData> {
-    return this.getEmPower(true, range, date, idx);
+    return this.getEmPower(true, range, date, idx).pipe(map(mmtData => { 
+      mmtData.desc.max *= 0.5; // the sum is 3x the maximum = 7.5k, which is way too much
+      return mmtData;
+    }));
   }
 
   public getEmPower(isIn: boolean, range: TimeFrame, date?: string, idx?: number) {
