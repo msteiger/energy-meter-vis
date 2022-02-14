@@ -51,6 +51,14 @@ export class ChartViewComponent implements OnInit {
     plugins: {
       legend: {
         display: false,
+      },
+      tooltip: {
+        callbacks: {
+          label: function(tooltipItem: TooltipItem<'line'>) : string {
+            // override default rendering of float numbers
+            return tooltipItem.dataset.label + ": " + tooltipItem.parsed.y.toFixed(1);
+          }
+        }
       }
     }
   };
