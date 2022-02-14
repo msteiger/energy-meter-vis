@@ -79,7 +79,7 @@ export class ChartViewComponent implements OnInit {
     this.setDataArray([measurementData], frame);
   }
 
-  public setDataArray(measurementData: MeasurementData[], frame: TimeFrame, stacked?: boolean) {
+  public setDataArray(measurementData: MeasurementData[], frame: TimeFrame, stack?: string[]) {
 
     this.setTimeframe(frame);
 
@@ -94,9 +94,9 @@ export class ChartViewComponent implements OnInit {
     const xScale = this.chartOptions!.scales!.x!;  // TODO: check why compiler complains
 
     // @ts-ignore
-    yScale.stacked = stacked;  // TODO: check why needs to be forced
+    yScale.stacked = stack;  // TODO: check why needs to be forced
     yScale.min = minY;
-    yScale.max = (stacked) ? sumY : maxY;
+    yScale.max = (stack) ? sumY : maxY;
 
     xScale.min = minX;
     xScale.max = maxX;
@@ -106,9 +106,11 @@ export class ChartViewComponent implements OnInit {
     }
 
     for (const [idx, item] of measurementData.entries()) {
+      const sameStack = stack? idx > 0 ? stack[idx - 1] === stack[idx] : false : false;
       this.chartData.datasets.push(
       {
-          fill: (idx == 0) ? 'origin' : '-1',
+          fill: sameStack ? '-1' : 'origin',
+          stack: stack ? stack[idx] : undefined,
           label: item.desc.name,
           data: item.data,
           spanGaps: this.toleratedGapWidth,

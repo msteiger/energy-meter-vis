@@ -73,12 +73,13 @@ export class InverterComponent implements OnInit, AfterContentInit, AfterViewIni
   }
 
   private loadElectricData(date?: string) {
-
     let lOut$ = this.dataService.getEmPowerOut(this.range, date);
-    let lIn$ = this.dataService.getEmPowerIn(this.range, date);
-
-    zip(lOut$, lIn$).subscribe({
-        next: value => this.electricChartView.setDataArray(value, this.range, false),
+    let l1$ = this.dataService.getEmPowerIn(this.range, date, 1);
+    let l2$ = this.dataService.getEmPowerIn(this.range, date, 2);
+    let l3$ = this.dataService.getEmPowerIn(this.range, date, 3);
+    
+    zip(lOut$, l1$, l2$, l3$).subscribe({
+        next: value => this.electricChartView.setDataArray(value, this.range, ['out', 'in', 'in', 'in']),
         error: error => this.error = error.statusText + " (" + error.status + ") - " + error.error,
         complete: () => this.loading = false
       });
