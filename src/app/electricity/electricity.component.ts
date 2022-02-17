@@ -28,7 +28,7 @@ export class ElectricityComponent implements OnInit, AfterContentInit, AfterView
     let lIn = this.dataService.getEmPowerIn(TimeFrame.DAILY, day);
 
     zip(lOut, lIn).subscribe({
-        next: value => this.chartView.setDataArray(value, TimeFrame.DAILY, false),
+        next: value => this.chartView.setDataArray(value, TimeFrame.DAILY),
         error: error => this.error = error.statusText + " (" + error.status + ") - " + error.error,
         complete: () => this.loading = false
       });

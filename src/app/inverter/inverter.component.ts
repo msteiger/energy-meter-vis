@@ -14,6 +14,7 @@ export class InverterComponent implements OnInit, AfterContentInit, AfterViewIni
 
   @ViewChild('inverterChart') private inverterChartView!: ChartViewComponent;
   @ViewChild('electricChart') private electricChartView!: ChartViewComponent;
+  @ViewChild('heatingChart') private heatingChartView!: ChartViewComponent;
 
   constructor(private dataService: DataService) {
 
@@ -29,8 +30,9 @@ export class InverterComponent implements OnInit, AfterContentInit, AfterViewIni
 
   range: TimeFrame = TimeFrame.DAILY;
 
-  electricColors = ['#dada15', '#71bad5', '#6799ec', '#ee80a6'];
   inverterColors = ['#dada15'];
+  electricColors = ['#dada15', '#B1B15D', '#93D193', '#ee80a6'];
+  heatingColors = ['#7373A1', '#6799ec', '#71bad5'];
 
   ngAfterViewInit(): void {
     this.gotoDate(0, this.currentDate);
@@ -59,6 +61,7 @@ export class InverterComponent implements OnInit, AfterContentInit, AfterViewIni
   gotoDate(delta: number, date?: string) {
     this.loadInverterData(date);
     this.loadElectricData(date);
+    this.loadHeatingData(date);
   }
 
   private loadInverterData(date?: string) {
@@ -79,10 +82,22 @@ export class InverterComponent implements OnInit, AfterContentInit, AfterViewIni
     let l3$ = this.dataService.getEmPowerIn(this.range, date, 3);
     
     zip(lOut$, l1$, l2$, l3$).subscribe({
-        next: value => this.electricChartView.setDataArray(value, this.range, ['out', 'in', 'in', 'in']),
+        next: values => this.electricChartView.setDataArray(values, this.range, ['out', 'in', 'in', 'in']),
         error: error => this.error = error.statusText + " (" + error.status + ") - " + error.error,
         complete: () => this.loading = false
       });
+  }
+
+  private loadHeatingData(date?: string) {
+    const data1$ = this.dataService.getHeating(this.range, 'extern', date);
+    const data2$ = this.dataService.getHeating(this.range, 'boiler', date);
+    const data3$ = this.dataService.getHeating(this.range, 'kessel', date);
+
+    zip(data1$, data2$, data3$).subscribe({
+      next: values => this.heatingChartView.setDataArray(values, this.range),
+      error: error => this.error = error.statusText + " (" + error.status + ") - " + error.error,
+      complete: () => this.loading = false
+    });
   }
 
   private updateView(data?: MeasurementData) {

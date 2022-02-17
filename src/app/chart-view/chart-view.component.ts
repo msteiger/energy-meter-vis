@@ -114,7 +114,12 @@ export class ChartViewComponent implements OnInit {
     }
 
     for (const [idx, item] of measurementData.entries()) {
-      const sameStack = stack? idx > 0 ? stack[idx - 1] === stack[idx] : false : false;
+      let sameStack;
+      if (stack) {
+        sameStack = idx > 0 ? stack[idx - 1] === stack[idx] : false;
+      } else {
+        sameStack = idx > 0;
+      }
       this.chartData.datasets.push(
       {
           fill: sameStack ? '-1' : 'origin',
