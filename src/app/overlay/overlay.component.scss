@@ -1,0 +1,28 @@
+.root {
+  // Why does :host not work here?
+  display: grid;
+
+  > * {
+    grid-area: container;
+  }
+}
+
+.overlay {
+  margin-top: 50px;
+  margin-right: 50px;
+  margin-bottom: auto;
+  margin-left: auto;
+  padding: 8px;
+  width: 110px;
+  height: 160px;
+  background: #eeec;
+  border: 1px solid gray;
+  border-radius: 10px;
+  z-index: 99999;
+}
+
+.content {
+  color: black;
+  font-size: small;
+  user-select: none;
+}

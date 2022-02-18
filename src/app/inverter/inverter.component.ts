@@ -8,7 +8,7 @@ import {zip} from "rxjs";
 @Component({
   selector: 'app-inverter',
   templateUrl: './inverter.component.html',
-  styleUrls: ['./inverter.component.css']
+  styleUrls: ['./inverter.component.scss']
 })
 export class InverterComponent implements OnInit, AfterContentInit, AfterViewInit  {
 
@@ -33,6 +33,8 @@ export class InverterComponent implements OnInit, AfterContentInit, AfterViewIni
   inverterColors = ['#dada15'];
   electricColors = ['#dada15', '#B1B15D', '#93D193', '#ee80a6'];
   heatingColors = ['#7373A1', '#6799ec', '#71bad5'];
+
+  inverterInfoText = 'Total power: 3432 Watt!'
 
   ngAfterViewInit(): void {
     this.gotoDate(0, this.currentDate);
