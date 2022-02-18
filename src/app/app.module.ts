@@ -19,6 +19,7 @@ import { RangePickerComponent } from './range-picker/range-picker.component';
 import { HttpClientModule } from '@angular/common/http';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatDateFnsModule } from '@angular/material-date-fns-adapter';
+import { OverlayComponent } from './overlay/overlay.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { MatDateFnsModule } from '@angular/material-date-fns-adapter';
     BannerComponent,
     InverterComponent,
     DatePickerComponent,
-    RangePickerComponent
+    RangePickerComponent,
+    OverlayComponent
   ],
   imports: [
     BrowserModule,

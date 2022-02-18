@@ -38,6 +38,8 @@ export class InverterComponent implements OnInit, AfterContentInit, AfterViewIni
   private regexDaily   = new RegExp('^(20[0-9]{2})-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$');
   private regexMonthly = new RegExp('^(20[0-9]{2})-(0[1-9]|1[012])$');
 
+  inverterInfoText = 'Total power: 3432 Watt!'
+
   constructor(public dataService: DataService, private router: Router, private route: ActivatedRoute) {
 
   }
