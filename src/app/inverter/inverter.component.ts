@@ -1,5 +1,4 @@
 import {AfterContentInit, AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
-import {DataServiceMock} from "../data-service-mock.service";
 import {DataService, MeasurementData} from "../data-service.service";
 import {ChartViewComponent} from "../chart-view/chart-view.component";
 import { TimeFrame } from '../time-frame';
