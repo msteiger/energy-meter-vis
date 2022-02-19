@@ -1,6 +1,6 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {BaseChartDirective } from "ng2-charts";
-import {Chart, ChartConfiguration, ChartData, ChartType, Color, TimeScaleOptions, TimeUnit, Tooltip, TooltipItem} from "chart.js";
+import {Chart, ChartConfiguration, ChartData, ChartType, Color, Tick, TimeScaleOptions, TimeUnit, Tooltip, TooltipItem} from "chart.js";
 import {MeasurementData} from "../data-service.service";
 import {LineHoverPlugin} from "./lineHoverPlugin";
 import { TimeFrame } from '../time-frame';
@@ -41,6 +41,11 @@ export class ChartViewComponent implements OnInit {
         stacked: false
       },
       y: {
+        ticks: {
+          callback: function(tickValue: string | number, index: number, ticks: Tick[]): string {
+              return '' + tickValue;  // no formatting
+          }
+        },
         stacked: false
       }
     },
