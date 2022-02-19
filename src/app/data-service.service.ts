@@ -1,8 +1,10 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {BehaviorSubject, Observable, Subject} from "rxjs";
-import { delay, map, shareReplay } from "rxjs/operators";
+import { delay, map, shareReplay, tap } from "rxjs/operators";
 import { TimeFrame } from './time-frame';
+import * as saveAs from 'file-saver';
+
 
 export interface MeasurementData {
   desc: SensorType,
@@ -89,6 +91,10 @@ export class DataService {
       data$ = data$.pipe(map(this.avgToSum));
     }
 
+    data$ = data$.pipe(tap(
+      next => this.dumpAsFile(id, frame, next)
+    ));
+
     return data$;
   }
 
@@ -107,6 +113,21 @@ export class DataService {
     obj.desc.min = - obj.desc.max;
     obj.desc.max = tmp;
     return obj;
+  }
+
+  private dumpAsFile(id: string, frame: string, obj: MeasurementData) {
+
+    console.log("TAP");
+
+    const date = obj.current;
+
+    const fname = frame + '_' + id + '_' + date + '.json';
+
+    // Creating a file object with some content
+    const fileObj = new File([JSON.stringify(obj)], fname, {type: 'application/json'});
+
+    let file = new Blob([JSON.stringify(obj)], { type: 'application/json;charset=utf-8' });
+    saveAs(file, fname);
   }
 }
 
