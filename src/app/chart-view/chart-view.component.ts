@@ -101,6 +101,11 @@ export class ChartViewComponent implements OnInit {
     const yScale = this.chartOptions!.scales!.y!;  // TODO: check why compiler complains
     const xScale = this.chartOptions!.scales!.x!;  // TODO: check why compiler complains
 
+    if (maxY < 1000) {
+      // TODO: fix this properly by measuring the text width of the y-axis tick labels
+      yScale.ticks = { padding: 10 };
+    }
+
     // @ts-ignore
     yScale.stacked = stack;  // TODO: check why needs to be forced
     yScale.min = minY;
