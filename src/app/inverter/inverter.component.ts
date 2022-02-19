@@ -4,6 +4,8 @@ import {DataService, MeasurementData} from "../data-service.service";
 import {ChartViewComponent} from "../chart-view/chart-view.component";
 import { TimeFrame } from '../time-frame';
 import {zip} from "rxjs";
+import 'chartjs-adapter-date-fns';
+
 
 @Component({
   selector: 'app-inverter',
