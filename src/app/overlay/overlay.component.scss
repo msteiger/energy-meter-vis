@@ -1,13 +1,6 @@
-.root {
-  // Why does :host not work here?
-  display: grid;
-
-  > * {
-    grid-area: container;
-  }
-}
 
 .overlay {
+  position:absolute;
   margin-top: 50px;
   margin-right: 50px;
   margin-bottom: auto;

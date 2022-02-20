@@ -17,10 +17,12 @@
         </app-range-picker>
       </div>
 
-      <app-overlay [text]="inverterInfoText">
-        <app-chart-view #inverterChart [colors]="inverterColors"></app-chart-view>
+      <app-overlay [target]="inverterChart">
+        <p>Text Text</p>
       </app-overlay>
- 
+
+      <app-chart-view #inverterChart [colors]="inverterColors"></app-chart-view>
+
       <app-chart-view #electricChart [colors]="electricColors"></app-chart-view>
 
       <app-chart-view #heatingChart [colors]="heatingColors"></app-chart-view>
