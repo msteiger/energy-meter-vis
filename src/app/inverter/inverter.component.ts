@@ -4,6 +4,8 @@ import {ChartViewComponent} from "../chart-view/chart-view.component";
 import { TimeFrame } from '../time-frame';
 import {zip} from "rxjs";
 import 'chartjs-adapter-date-fns';
+import { ActivatedRoute, Router } from '@angular/router';
+import { RangePickerComponent } from '../range-picker/range-picker.component';
 
 
 @Component({
@@ -16,16 +18,13 @@ export class InverterComponent implements OnInit, AfterContentInit, AfterViewIni
   @ViewChild('inverterChart') private inverterChartView!: ChartViewComponent;
   @ViewChild('electricChart') private electricChartView!: ChartViewComponent;
   @ViewChild('heatingChart') private heatingChartView!: ChartViewComponent;
-
-  constructor(private dataService: DataService) {
-
-  }
+  @ViewChild(RangePickerComponent) private rangePicker!: RangePickerComponent;
 
   error?: string;
   loading: boolean = true
 
   savedOtherDate? = "2022-02";
-  currentDate? = "2022-02-13";
+  currentDate?: string;
   prevDate?: string;
   nextDate?: string;
 
@@ -35,14 +34,29 @@ export class InverterComponent implements OnInit, AfterContentInit, AfterViewIni
   electricColors = ['#dada15', '#B1B15D', '#93D193', '#ee80a6'];
   heatingColors = ['#7373A1', '#6799ec', '#71bad5'];
 
+  private regexDaily   = new RegExp('^(20[0-9]{2})-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$');
+  private regexMonthly = new RegExp('^(20[0-9]{2})-(0[1-9]|1[012])$');
+
+  constructor(private dataService: DataService, private router: Router, private route: ActivatedRoute) {
+
+  }
+
   ngAfterViewInit(): void {
-    this.gotoDate(0, this.currentDate);
+    // TODO: find a better way to update the selected range-picker button
+    setTimeout(() => {
+      this.rangePicker.selectedVal = TimeFrame[this.range];
+    });
   }
 
   ngAfterContentInit() {
   }
 
   ngOnInit() {
+    this.route.queryParams
+      .subscribe(params => {
+        this.gotoDate(0, params.date);
+      }
+    );
   }
 
   pickRange(range: TimeFrame) {
@@ -51,15 +65,36 @@ export class InverterComponent implements OnInit, AfterContentInit, AfterViewIni
     }
 
     this.range = range;
-    
+
     const tmp = this.savedOtherDate;
     this.savedOtherDate = this.currentDate;
-    this.currentDate = tmp;
 
-    this.gotoDate(0, this.currentDate);
+    this.gotoDate(0, tmp);
   }
 
   gotoDate(delta: number, date?: string) {
+
+    const today = new Date().toISOString().substring(0, 10);
+
+    if (!date) {
+      date = today;
+    }
+
+    if (date == this.currentDate) {
+      return;
+    }
+
+    if (this.regexDaily.test(date)) {
+      this.pickRange(TimeFrame.DAILY);
+    } else if (this.regexMonthly.test(date)) {
+      this.pickRange(TimeFrame.MONTHLY);
+    } else {
+      date = today;
+      this.pickRange(TimeFrame.DAILY);
+    }
+
+    this.router.navigate(['dashboard'], { queryParams: { date: date }})
+
     this.loadInverterData(date);
     this.loadElectricData(date);
     this.loadHeatingData(date);
@@ -81,7 +116,7 @@ export class InverterComponent implements OnInit, AfterContentInit, AfterViewIni
     let l1$ = this.dataService.getEmPowerIn(this.range, date, 1);
     let l2$ = this.dataService.getEmPowerIn(this.range, date, 2);
     let l3$ = this.dataService.getEmPowerIn(this.range, date, 3);
-    
+
     zip(lOut$, l1$, l2$, l3$).subscribe({
         next: values => this.electricChartView.setDataArray(values, this.range, ['out', 'in', 'in', 'in']),
         error: error => this.error = error.statusText + " (" + error.status + ") - " + error.error,

@@ -3,8 +3,8 @@ import { RouterModule, Routes } from '@angular/router';
 import {InverterComponent} from "./inverter/inverter.component";
 
 const routes: Routes = [
-  { path: 'inverter', component:  InverterComponent},
-  { path: '**', redirectTo: '/inverter', pathMatch: 'full' },
+  { path: 'dashboard', component:  InverterComponent},
+  { path: '**', redirectTo: '/dashboard', pathMatch: 'full' },
 ];
 
 @NgModule({
