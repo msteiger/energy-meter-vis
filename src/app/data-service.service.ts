@@ -44,9 +44,9 @@ export class DataService {
   public getEmPowerOut(range: TimeFrame, date?: string): Observable<MeasurementData> {
     return this.getEmPower(false, range, date).pipe(map(data => this.negateValues(data)));
   }
-  
+
   public getEmPowerIn(range: TimeFrame, date?: string, idx?: number): Observable<MeasurementData> {
-    return this.getEmPower(true, range, date, idx).pipe(map(mmtData => { 
+    return this.getEmPower(true, range, date, idx).pipe(map(mmtData => {
       mmtData.desc.max *= 0.5; // the sum is 3x the maximum = 7.5k, which is way too much
       return mmtData;
     }));
@@ -56,7 +56,7 @@ export class DataService {
     let id = 'em-power-';
 
     id += isIn ? 'in' : 'out';
-    
+
     if (idx && idx >= 1 && idx <= 3) {
       id += '-l' + idx;
     }
@@ -72,8 +72,8 @@ export class DataService {
   private getData(id: string, range: TimeFrame, date?: string): Observable<MeasurementData> {
     const frame = TimeFrame[range].toLowerCase();
 
-    let data$ = this.getMockData(id, frame, date);
-    
+    let data$ = this.getRealData(id, frame, date);
+
     if (range == TimeFrame.MONTHLY && !id.startsWith("heating-")) {
       data$ = data$.pipe(map(this.avgToSum));
     }
@@ -96,7 +96,7 @@ export class DataService {
   private getRealData(id: string, frame: string, date?: string): Observable<MeasurementData> {
 
     let params = new HttpParams();
-    
+
     if (date) {
       params = params.set('date', date);
     }
@@ -109,7 +109,7 @@ export class DataService {
   }
 
   private avgToSum(obj: MeasurementData): MeasurementData {
-    obj.data.forEach(msmt => { 
+    obj.data.forEach(msmt => {
       msmt.y *= msmt.measurements / 60;
     });
     obj.desc.max *= 24;
