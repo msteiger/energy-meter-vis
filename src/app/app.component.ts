@@ -12,27 +12,12 @@ import { DateAdapter } from '@angular/material/core';
 })
 export class AppComponent {
 
-  links = [{
-    id: 'inverter',
-    name: 'Inverter'
-  }, {
-    id: 'heating',
-    name: 'Heating'
-  }, {
-    id: 'electricity',
-    name: 'Electricity'
-  }];
-
-  activeLink = this.links[0];
-
   constructor(
-    private location: Location,
-    private router: Router,
     private dateAdapter: DateAdapter<Date, Locale>) {
       // it should be possible to set the defaults like this:
       // providers: [
       // {
-      //   provide: DateAdapter, 
+      //   provide: DateAdapter,
       //   useClass: DateFnsAdapter, deps: [MAT_DATE_LOCALE],
       // },
       // {
@@ -48,9 +33,5 @@ export class AppComponent {
   }
 
   ngOnInit(): void {
-    const fromUrl = this.links.find(link => (this.location.path() === '/' + link.id));
-    if (fromUrl) {
-      this.activeLink = fromUrl;
-    }
   }
 }

@@ -25,7 +25,7 @@ export class ChartViewComponent implements OnInit {
         duration: 0
       }
     },
-    responsive: true,
+    responsive: false,
     scales: {
       x: {
         type: 'time',
