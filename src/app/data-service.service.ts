@@ -33,8 +33,14 @@ export interface SensorType {
 })
 export class DataService {
 
+  private loading = 0;
+
   constructor(private http: HttpClient) {
     //
+  }
+
+  public getLoadingCount() {
+    return this.loading;
   }
 
   public getInverter(range: TimeFrame, date?: string): Observable<MeasurementData> {
@@ -72,11 +78,18 @@ export class DataService {
   private getData(id: string, range: TimeFrame, date?: string): Observable<MeasurementData> {
     const frame = TimeFrame[range].toLowerCase();
 
+    this.loading++;
+
     let data$ = this.getRealData(id, frame, date);
 
     if (range == TimeFrame.MONTHLY && !id.startsWith("heating-")) {
       data$ = data$.pipe(map(this.avgToSum));
     }
+
+    data$.subscribe({
+        error: () => this.loading--,
+        complete: () => this.loading--
+      });
 
     return data$;
   }

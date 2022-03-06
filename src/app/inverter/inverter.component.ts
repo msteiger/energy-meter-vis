@@ -11,7 +11,7 @@ import { RangePickerComponent } from '../range-picker/range-picker.component';
 @Component({
   selector: 'app-inverter',
   templateUrl: './inverter.component.html',
-  styleUrls: ['./inverter.component.css']
+  styleUrls: ['./inverter.component.scss']
 })
 export class InverterComponent implements OnInit, AfterContentInit, AfterViewInit  {
 
@@ -101,13 +101,10 @@ export class InverterComponent implements OnInit, AfterContentInit, AfterViewIni
   }
 
   private loadInverterData(date?: string) {
-//    this.loading = true;
-
     const invData$ = this.dataService.getInverter(this.range, date);
     invData$.subscribe({
       next: value => this.updateView(value),
       error: error => this.error = error.statusText + " (" + error.status + ") - " + error.error,
-      complete: () => this.loading = false
     });
   }
 
@@ -120,7 +117,6 @@ export class InverterComponent implements OnInit, AfterContentInit, AfterViewIni
     zip(lOut$, l1$, l2$, l3$).subscribe({
         next: values => this.electricChartView.setDataArray(values, this.range, ['out', 'in', 'in', 'in']),
         error: error => this.error = error.statusText + " (" + error.status + ") - " + error.error,
-        complete: () => this.loading = false
       });
   }
 
