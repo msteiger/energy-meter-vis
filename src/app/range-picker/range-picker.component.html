@@ -1,15 +1,21 @@
 
-<mat-button-toggle-group 
-  #group="matButtonToggleGroup" 
-  [value]="selectedVal" 
+<mat-button-toggle-group
+  #group="matButtonToggleGroup"
+  [value]="selectedVal"
   (change)="setDateRange(group.value)">
+
+  <mat-button-toggle
+    mat-stroked-button
+    value="HOURLY">
+    Hourly
+  </mat-button-toggle>
 
   <mat-button-toggle
     mat-stroked-button
     value="DAILY">
     Daily
   </mat-button-toggle>
-  
+
   <mat-button-toggle
     mat-stroked-button
     value="MONTHLY">

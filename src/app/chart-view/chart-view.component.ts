@@ -32,7 +32,8 @@ export class ChartViewComponent implements OnInit {
         time: {
           displayFormats: {
             day: 'd',
-            hour: 'H:mm'
+            hour: 'H:mm',
+            minute: 'H:mm'
           },
           tooltipFormat:'HH:mm',
           unit: 'hour',
@@ -155,6 +156,11 @@ export class ChartViewComponent implements OnInit {
     let tooltipFormat;
 
     switch (frame) {
+      case TimeFrame.HOURLY:
+        unit = "minute"
+        tooltipFormat = 'HH:mm'
+        this.toleratedGapWidth = 60000;
+        break;
       case TimeFrame.DAILY:
         unit = "hour"
         tooltipFormat = 'HH:mm'
