@@ -2,28 +2,31 @@
 <app-banner *ngIf="error">{{error}}</app-banner>
 
 <div *ngIf="!error">
-  <mat-spinner *ngIf="loading"></mat-spinner>
-  <div [hidden]="loading">
-    <div class="content">
-      <div class="row" style="display: flex; align-items: center;">
-        <app-date-picker
-          [currentValue]="currentDate"
-          [prevValue]="prevDate"
-          [nextValue]="nextDate"
-          (navigate)="gotoDate($event.delta, $event.value)">
-        </app-date-picker>
-        <app-range-picker
-          (pickRange)="pickRange($event.value)">
-        </app-range-picker>
-      </div>
-
-      <app-chart-view #inverterChart [colors]="inverterColors"></app-chart-view>
-
-      <app-chart-view #electricChart [colors]="electricColors"></app-chart-view>
-
-      <app-chart-view #heatingChart [colors]="heatingColors"></app-chart-view>
-
+  <div class="content">
+    <div class="row" style="display: flex; align-items: center; align-content: center;">
+      <mat-spinner
+        *ngIf="getLoadingFactor() < 100"
+        [value]=getLoadingFactor()
+        style="position: absolute;"
+        diameter="32"
+        mode="determinate">
+      </mat-spinner>
+      <app-date-picker
+        [currentValue]="currentDate"
+        [prevValue]="prevDate"
+        [nextValue]="nextDate"
+        (navigate)="gotoDate($event.delta, $event.value)">
+      </app-date-picker>
+      <app-range-picker
+        (pickRange)="pickRange($event.value)">
+      </app-range-picker>
     </div>
+
+    <app-chart-view #inverterChart [colors]="inverterColors"></app-chart-view>
+
+    <app-chart-view #electricChart [colors]="electricColors"></app-chart-view>
+
+    <app-chart-view #heatingChart [colors]="heatingColors"></app-chart-view>
   </div>
 </div>
 

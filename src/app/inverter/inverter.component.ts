@@ -127,8 +127,7 @@ export class InverterComponent implements OnInit, AfterContentInit, AfterViewIni
 
     zip(data1$, data2$, data3$).subscribe({
       next: values => this.heatingChartView.setDataArray(values, this.range),
-      error: error => this.error = error.statusText + " (" + error.status + ") - " + error.error,
-      complete: () => this.loading = false
+      error: error => this.error = error.statusText + " (" + error.status + ") - " + error.error
     });
   }
 
@@ -140,4 +139,11 @@ export class InverterComponent implements OnInit, AfterContentInit, AfterViewIni
       this.prevDate = data.prev;
     }
   }
+
+  public getLoadingFactor(): number {
+    const count = this.dataService.getLoadingCount();
+    const maxCount = 8;
+    return 100 * (1 - count / maxCount);
+  }
+
 }
