@@ -30,7 +30,7 @@ export class InverterComponent implements OnInit, AfterContentInit, AfterViewIni
 
   range: TimeFrame = TimeFrame.DAILY;
 
-  inverterColors = ['#dada15'];
+  inverterColors = ['#9fdaba', '#dada15'];
   electricColors = ['#dada15', '#B1B15D', '#93D193', '#ee80a6'];
   heatingColors = ['#7373A1', '#6799ec', '#71bad5'];
 
@@ -100,15 +100,20 @@ export class InverterComponent implements OnInit, AfterContentInit, AfterViewIni
   }
 
   loadData(date?: string) {
-    this.loadInverterData(date);
+    this.loadInverterAndHeaterData(date);
     this.loadElectricData(date);
     this.loadHeatingData(date);
   }
 
-  private loadInverterData(date?: string) {
+  private loadInverterAndHeaterData(date?: string) {
     const invData$ = this.dataService.getInverter(this.range, date);
-    invData$.subscribe({
-      next: value => this.updateView(value),
+    const heaterData$ = this.dataService.getHeaterPower(this.range, date);
+
+    zip(heaterData$, invData$).subscribe({
+      next: value => {
+        this.inverterChartView.setDataArray(value, this.range);
+        this.updateView(value[0]);
+      },
       error: error => this.error = error.statusText + " (" + error.status + ") - " + error.error,
     });
   }
@@ -138,7 +143,6 @@ export class InverterComponent implements OnInit, AfterContentInit, AfterViewIni
 
   private updateView(data?: MeasurementData) {
     if (data) {
-      this.inverterChartView.setData(data, this.range);
       this.router.navigate(['dashboard'], { queryParams: { date: data.current }})
 
 //      this.currentDate = data.current;

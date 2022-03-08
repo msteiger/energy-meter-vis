@@ -47,6 +47,10 @@ export class DataService {
     return this.getData('inverter-ac-power', range, date);
   }
 
+  public getHeaterPower(range: TimeFrame, date?: string): Observable<MeasurementData> {
+    return this.getData('heater-power', range, date);
+  }
+
   public getEmPowerOut(range: TimeFrame, date?: string): Observable<MeasurementData> {
     return this.getEmPower(false, range, date).pipe(map(data => this.negateValues(data)));
   }
