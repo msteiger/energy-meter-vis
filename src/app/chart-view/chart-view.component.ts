@@ -159,12 +159,12 @@ export class ChartViewComponent implements OnInit {
       case TimeFrame.HOURLY:
         unit = "minute"
         tooltipFormat = 'HH:mm'
-        this.toleratedGapWidth = 60000;
+        this.toleratedGapWidth = 2 * 60 * 1000; // tolerate 1 missing entry
         break;
       case TimeFrame.DAILY:
         unit = "hour"
         tooltipFormat = 'HH:mm'
-        this.toleratedGapWidth = 900000;
+        this.toleratedGapWidth = 15 * 60 * 1000;
         break;
       case TimeFrame.MONTHLY:
         unit = "day"
