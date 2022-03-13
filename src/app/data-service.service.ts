@@ -4,6 +4,12 @@ import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { TimeFrame } from './time-frame';
 
+export interface StatsData {
+  yearToDate: number,
+  today: number,
+  last30Days: number,
+}
+
 export interface MeasurementData {
   desc: SensorType,
   start: number,
@@ -43,6 +49,10 @@ export class DataService {
     return this.loading;
   }
 
+  public getInverterStats(date?: string): Observable<StatsData> {
+    return this.getStats('inverter-ac-power', 'daily', date);
+  }
+
   public getInverter(range: TimeFrame, date?: string): Observable<MeasurementData> {
     return this.getData('inverter-ac-power', range, date);
   }
@@ -72,6 +82,10 @@ export class DataService {
     }
 
     return this.getData(id, range, date);
+  }
+
+  public getEmPowerStats(dir: string, date?: string): Observable<StatsData> {
+    return this.getStats('em-power-' + dir, 'daily', date);
   }
 
   public getHeating(range: TimeFrame, id: string, date?: string): Observable<MeasurementData> {
@@ -118,11 +132,22 @@ export class DataService {
       params = params.set('date', date);
     }
 
-    const root = 'data'
-
-    const url = root + '/' + id + '/' + frame;
+    const url = 'data' + '/' + id + '/' + frame;
 
     return this.http.get<MeasurementData>(url, { params: params });
+  }
+
+  private getStats(id: string, frame:string, date?: string): Observable<StatsData> {
+
+    let params = new HttpParams();
+
+    if (date) {
+      params = params.set('date', date);
+    }
+
+    const url = 'data' + '/' + id + '/' + frame + '/stats';
+
+    return this.http.get<StatsData>(url, { params: params });
   }
 
   private avgToSum(obj: MeasurementData): MeasurementData {

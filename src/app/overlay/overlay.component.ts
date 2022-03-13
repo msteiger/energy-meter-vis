@@ -13,6 +13,14 @@ export class OverlayComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  @Input('text')
-  text: string = '';
+  @Input('content')
+  content = new Map();
+
+  @Input('color')
+  color = '#eeec';
+
+  @Input('margin')
+  margin = '50px 50px auto auto';
+
+  asIs() { return 0; }
 }
