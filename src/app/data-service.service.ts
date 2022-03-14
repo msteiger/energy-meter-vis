@@ -50,7 +50,7 @@ export class DataService {
   }
 
   public getInverterStats(date?: string): Observable<StatsData> {
-    return this.getStats('inverter-ac-power', 'daily', date);
+    return this.getStats('inverter-ac-power', date);
   }
 
   public getInverter(range: TimeFrame, date?: string): Observable<MeasurementData> {
@@ -85,7 +85,7 @@ export class DataService {
   }
 
   public getEmPowerStats(dir: string, date?: string): Observable<StatsData> {
-    return this.getStats('em-power-' + dir, 'daily', date);
+    return this.getStats('em-power-' + dir, date);
   }
 
   public getHeating(range: TimeFrame, id: string, date?: string): Observable<MeasurementData> {
@@ -137,7 +137,7 @@ export class DataService {
     return this.http.get<MeasurementData>(url, { params: params });
   }
 
-  private getStats(id: string, frame:string, date?: string): Observable<StatsData> {
+  private getStats(id: string, date?: string): Observable<StatsData> {
 
     let params = new HttpParams();
 
@@ -145,7 +145,7 @@ export class DataService {
       params = params.set('date', date);
     }
 
-    const url = 'data' + '/' + id + '/' + frame + '/stats';
+    const url = 'data' + '/' + id + '/' + 'stats';
 
     return this.http.get<StatsData>(url, { params: params });
   }
