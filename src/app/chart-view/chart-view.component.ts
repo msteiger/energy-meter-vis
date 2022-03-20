@@ -12,7 +12,9 @@ import { TimeFrame } from '../time-frame';
 })
 export class ChartViewComponent implements OnInit {
 
-  @ViewChild(BaseChartDirective) chart!: BaseChartDirective;
+//  @ViewChild(BaseChartDirective) chart!: BaseChartDirective;
+
+  @Input('chartWidth') chartWidth: number = 700;
 
   public readonly chartOptions: ChartConfiguration['options'] | any = {
 //    animation: false,
