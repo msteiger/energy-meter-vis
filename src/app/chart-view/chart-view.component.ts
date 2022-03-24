@@ -1,6 +1,6 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {BaseChartDirective } from "ng2-charts";
-import {Chart, ChartConfiguration, ChartData, ChartType, Color, Tick, TimeScaleOptions, TimeUnit, Tooltip, TooltipItem} from "chart.js";
+import {Chart, ChartConfiguration, ChartData, ChartType, Color, ScriptableContext, Tick, TimeScaleOptions, TimeUnit, Tooltip, TooltipItem} from "chart.js";
 import {MeasurementData} from "../data-service.service";
 import {LineHoverPlugin} from "./lineHoverPlugin";
 import { TimeFrame } from '../time-frame';
@@ -19,7 +19,13 @@ export class ChartViewComponent implements OnInit {
     animations: {
       x: {
         duration: 500,
-        easing: "linear"
+        easing: "easeOutBack",
+        from: (ctx: ScriptableContext<'line'> | any) => {
+          if (ctx.type === 'data' && ctx.mode === 'default') {
+            return (ctx.element.x) + ctx.chart.chartArea.width * this.slideDirection;
+          }
+          return undefined;
+        }
       },
       y: {
         duration: 0
@@ -75,6 +81,8 @@ export class ChartViewComponent implements OnInit {
 
   @Input('colors') colors = ['#20e020', '#f0e020', '#f04040'];
 
+  private slideDirection = 0;
+
   private toleratedGapWidth = 0;
 
   private primaryAlpha: string = 'ff';
@@ -89,13 +97,10 @@ export class ChartViewComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  public setData(measurementData: MeasurementData, frame: TimeFrame) {
-    this.setDataArray([measurementData], frame);
-  }
-
-  public setDataArray(measurementData: MeasurementData[], frame: TimeFrame, stack?: string[]) {
+  public setDataArray(measurementData: MeasurementData[], frame: TimeFrame, delta: number, stack?: string[]) {
 
     this.setTimeframe(frame);
+    this.slideDirection = delta;
 
     const minX = Math.min(...measurementData.map(obj => obj.start));
     const maxX = Math.max(...measurementData.map(obj => obj.end));

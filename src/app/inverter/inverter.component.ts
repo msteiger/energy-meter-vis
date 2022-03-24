@@ -64,6 +64,12 @@ export class InverterComponent implements OnInit, AfterContentInit, AfterViewIni
   }
 
   gotoDateAndRange(date: string) {
+    if (this.currentDate === date) {
+      // the first load of the page will trigger setting a date param and a reload
+      // the current date is already set so we can exit early in that case
+      return;
+    }
+
     if (this.regexHourly.test(date)) {
       this.range = TimeFrame.HOURLY;
     } else if (this.regexDaily.test(date)) {
@@ -77,7 +83,7 @@ export class InverterComponent implements OnInit, AfterContentInit, AfterViewIni
 
     this.currentDate = date;
 
-    this.loadData(this.currentDate);
+    this.loadData(0, this.currentDate);
   }
 
   pickRange(range: TimeFrame) {
@@ -90,7 +96,7 @@ export class InverterComponent implements OnInit, AfterContentInit, AfterViewIni
 
     this.range = range;
 
-    this.loadData(this.currentDate);
+    this.loadData(0, this.currentDate);
   }
 
   gotoDate(delta: number, date?: string) {
@@ -99,13 +105,13 @@ export class InverterComponent implements OnInit, AfterContentInit, AfterViewIni
     }
 
     this.currentDate = date || '';
-    this.loadData(this.currentDate);
+    this.loadData(delta, this.currentDate);
   }
 
-  loadData(date?: string) {
-    this.loadInverterAndHeaterData(date);
-    this.loadElectricData(date);
-    this.loadHeatingData(date);
+  loadData(delta: number, date?: string) {
+    this.loadInverterAndHeaterData(delta, date);
+    this.loadElectricData(delta, date);
+    this.loadHeatingData(delta, date);
     this.loadInfoBoxData(date);
   }
 
@@ -124,47 +130,46 @@ export class InverterComponent implements OnInit, AfterContentInit, AfterViewIni
         next: value => this.updateElectricInfoBox(value[0], value[1]) });
   }
 
-  private loadInverterAndHeaterData(date?: string) {
+  private loadInverterAndHeaterData(delta: number, date?: string) {
     const invData$ = this.dataService.getInverter(this.range, date);
     const heaterData$ = this.dataService.getHeaterPower(this.range, date);
 
     zip(heaterData$, invData$).subscribe({
       next: value => {
-        this.inverterChartView.setDataArray(value, this.range);
+        this.inverterChartView.setDataArray(value, this.range, delta);
         this.updateView(value[0]);
       },
       error: error => this.error = error.statusText + " (" + error.status + ") - " + error.error,
     });
   }
 
-  private loadElectricData(date?: string) {
+  private loadElectricData(delta: number, date?: string) {
     let lOut$ = this.dataService.getEmPowerOut(this.range, date);
     let l1$ = this.dataService.getEmPowerIn(this.range, date, 1);
     let l2$ = this.dataService.getEmPowerIn(this.range, date, 2);
     let l3$ = this.dataService.getEmPowerIn(this.range, date, 3);
 
     zip(lOut$, l1$, l2$, l3$).subscribe({
-        next: values => this.electricChartView.setDataArray(values, this.range, ['out', 'in', 'in', 'in']),
+        next: values => this.electricChartView.setDataArray(values, this.range, delta, ['out', 'in', 'in', 'in']),
         error: error => this.error = error.statusText + " (" + error.status + ") - " + error.error,
       });
   }
 
-  private loadHeatingData(date?: string) {
+  private loadHeatingData(delta: number, date?: string) {
     const data1$ = this.dataService.getHeating(this.range, 'extern', date);
     const data2$ = this.dataService.getHeating(this.range, 'boiler', date);
     const data3$ = this.dataService.getHeating(this.range, 'kessel', date);
 
     zip(data1$, data2$, data3$).subscribe({
-      next: values => this.heatingChartView.setDataArray(values, this.range),
+      next: values => this.heatingChartView.setDataArray(values, this.range, delta),
       error: error => this.error = error.statusText + " (" + error.status + ") - " + error.error
     });
   }
 
   private updateView(data?: MeasurementData) {
     if (data) {
-      this.router.navigate(['dashboard'], { queryParams: { date: data.current }})
+      this.router.navigate([], { queryParams: { date: data.current }})
 
-//      this.currentDate = data.current;
       this.nextDate = data.next;
       this.prevDate = data.prev;
     }
