@@ -24,7 +24,7 @@ export class InverterComponent implements OnInit, AfterContentInit, AfterViewIni
 
   savedDates = new Map<TimeFrame, string>();
 
-  currentDate: string = '';
+  currentDate: string = 'trigger-reload';
   prevDate?: string;
   nextDate?: string;
 
@@ -34,7 +34,7 @@ export class InverterComponent implements OnInit, AfterContentInit, AfterViewIni
   electricColors = ['#dada15', '#B1B15D', '#93D193', '#ee80a6'];
   heatingColors = ['#7373A1', '#6799ec', '#71bad5'];
 
-  private regexHourly  = new RegExp('^(20[0-9]{2})-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])T([0-2][0-9]):([0-5][0-9]):([0-5][0-9])Z$');
+  private regexHourly  = new RegExp('^(20[0-9]{2})-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])T([0-2][0-9]):([0-5][0-9])');
   private regexDaily   = new RegExp('^(20[0-9]{2})-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$');
   private regexMonthly = new RegExp('^(20[0-9]{2})-(0[1-9]|1[012])$');
 
@@ -63,7 +63,13 @@ export class InverterComponent implements OnInit, AfterContentInit, AfterViewIni
     );
   }
 
-  gotoDateAndRange(date: string) {
+  gotoDateAndRange(date?: string) {
+    if (date === undefined) {
+      date = '';
+    }
+
+    date = date.substring(0, 16); // cut off after minute
+
     if (this.currentDate === date) {
       // the first load of the page will trigger setting a date param and a reload
       // the current date is already set so we can exit early in that case
@@ -143,7 +149,7 @@ export class InverterComponent implements OnInit, AfterContentInit, AfterViewIni
     zip(heaterData$, invData$).subscribe({
       next: value => {
         this.inverterChartView.setDataArray(value, this.range, delta);
-        this.updateView(value[0]);
+        this.updateView(value[1]); // use invData to compute next/prev time range
       },
       error: error => this.error = error.statusText + " (" + error.status + ") - " + error.error,
     });
@@ -174,10 +180,10 @@ export class InverterComponent implements OnInit, AfterContentInit, AfterViewIni
 
   private updateView(data?: MeasurementData) {
     if (data) {
-      this.router.navigate([], { queryParams: { date: data.current }})
+      this.router.navigate([], { queryParams: { date: data.current.substring(0, 16) }})
 
-      this.nextDate = data.next;
-      this.prevDate = data.prev;
+      this.nextDate = data.next ? data.next.substring(0, 16) : '';
+      this.prevDate = data.prev ? data.prev.substring(0, 16) : '';
     }
   }
 

@@ -1,7 +1,7 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {BaseChartDirective } from "ng2-charts";
 import {Chart, ChartConfiguration, ChartData, ChartType, Color, ScriptableContext, Tick, TimeScaleOptions, TimeUnit, Tooltip, TooltipItem} from "chart.js";
-import {MeasurementData} from "../data-service.service";
+import {Measurement, MeasurementData} from "../data-service.service";
 import {LineHoverPlugin} from "./lineHoverPlugin";
 import { TimeFrame } from '../time-frame';
 
@@ -115,6 +115,18 @@ export class ChartViewComponent implements OnInit {
     if (maxY < 1000) {
       // TODO: fix this properly by measuring the text width of the y-axis tick labels
       yScale.ticks = { padding: 10 };
+    }
+
+    for (const set of measurementData.values()) {
+      if (set.data.length > 0 && set.data[0].x > minX) {
+        // insert a fake measurement to make the chart start at the left border
+        const fake: Measurement = {
+          x: minX,
+          y: set.data[0].y,
+          measurements: 0
+        };
+        set.data.splice(0, 0, fake);
+      }
     }
 
     // @ts-ignore
