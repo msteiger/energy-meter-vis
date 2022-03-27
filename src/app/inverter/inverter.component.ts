@@ -117,6 +117,12 @@ export class InverterComponent implements OnInit, AfterContentInit, AfterViewIni
 
   loadInfoBoxData(date?: string) {
     this.inverterInfo.clear();
+
+    if (this.range != TimeFrame.DAILY) {
+      // we have stats only for daily frames
+      return;
+    }
+
     const inv$ = this.dataService.getInverterStats(date);
 
     inv$.subscribe( {

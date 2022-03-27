@@ -151,7 +151,7 @@ export class ChartViewComponent implements OnInit {
           borderColor: this.colors[idx] + this.primaryAlpha,
           backgroundColor: this.colors[idx] + this.secondaryAlpha,
           hoverBackgroundColor: this.colors[idx] + this.primaryAlpha,
-          tension: 0.3
+          tension: 0.2
       });
     }
   }
