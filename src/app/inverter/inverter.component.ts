@@ -1,4 +1,3 @@
-import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
 import {AfterContentInit, AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {DataService, MeasurementData, StatsData} from "../data-service.service";
 import {ChartViewComponent} from "../chart-view/chart-view.component";
@@ -42,22 +41,7 @@ export class InverterComponent implements OnInit, AfterContentInit, AfterViewIni
   inverterInfo = new Map();
   electricInfo = new Map();
 
-  currentScreenSize = '';
-
-  chartDisplaySize = new Map([
-    [Breakpoints.XSmall, 400],
-    [Breakpoints.Small, 550],
-    [Breakpoints.Medium, 800],
-    [Breakpoints.Large, 960],
-    [Breakpoints.XLarge, 960],
-  ]);
-
-  constructor(
-    public dataService: DataService,
-    private router: Router,
-    private route: ActivatedRoute,
-    private breakpointObserver: BreakpointObserver
-    ) {
+  constructor(public dataService: DataService, private router: Router,  private route: ActivatedRoute) {
       // empty
   }
 
@@ -66,24 +50,6 @@ export class InverterComponent implements OnInit, AfterContentInit, AfterViewIni
     setTimeout(() => {
       this.rangePicker.selectedVal = TimeFrame[this.range];
     });
-
-    this.breakpointObserver
-      .observe([
-        Breakpoints.XSmall,
-        Breakpoints.Small,
-        Breakpoints.Medium,
-        Breakpoints.Large,
-        Breakpoints.XLarge,
-      ])
-//      .pipe(takeUntil(this.destroyed))
-      .subscribe(result => {
-        for (const query of Object.keys(result.breakpoints)) {
-          if (result.breakpoints[query]) {
-            this.inverterChartView.chartWidth = this.chartDisplaySize.get(query) ?? 960;
-            console.log("ChartSize: " + this.inverterChartView.chartWidth);
-          }
-        }
-      });
   }
 
   ngAfterContentInit() {

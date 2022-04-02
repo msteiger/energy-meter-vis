@@ -8,15 +8,13 @@ import { TimeFrame } from '../time-frame';
 @Component({
   selector: 'app-chart-view',
   templateUrl: './chart-view.component.html',
-  styleUrls: ['./chart-view.component.css']
+  styleUrls: ['./chart-view.component.scss']
 })
 export class ChartViewComponent implements OnInit {
 
 //  @ViewChild(BaseChartDirective) chart!: BaseChartDirective;
 
-  @Input('chartWidth') chartWidth: number = 700;
-
-  public readonly chartOptions: ChartConfiguration['options'] | any = {
+  public readonly chartOptions: ChartConfiguration['options'] = {
 //    animation: false,
     animations: {
       x: {
@@ -27,7 +25,8 @@ export class ChartViewComponent implements OnInit {
         duration: 0
       }
     },
-    responsive: false,
+    responsive: true,
+    maintainAspectRatio: false,
     scales: {
       x: {
         type: 'time',
@@ -154,7 +153,7 @@ export class ChartViewComponent implements OnInit {
   }
 
   public setTimeframe(frame: TimeFrame) {
-    let unit;
+    let unit: TimeUnit;
     let tooltipFormat;
 
     switch (frame) {
@@ -175,7 +174,7 @@ export class ChartViewComponent implements OnInit {
         break;
     }
 
-    const xScale = this.chartOptions?.scales?.x;
+    const xScale: TimeScaleOptions = this.chartOptions!.scales!.x as TimeScaleOptions;
 
     xScale.time.unit = unit;
     xScale.time.tooltipFormat = tooltipFormat;

@@ -1,7 +1,3 @@
-.spacer {
-  flex: 1;
-}
-
 .toolbar {
   position: absolute;
   top: 0;
@@ -23,40 +19,11 @@
   display: flex;
   margin: 0px auto 32px;
   padding: 82px 16px;
-  max-width: 960px;
   flex-direction: column;
   align-items: center;
-}
-
-a,
-a:visited,
-a:hover {
-  color: #1976d2;
-  text-decoration: none;
-}
-
-a:hover {
-  color: #125699;
 }
 
 footer {
   border: 1px solid black;
   margin-top: 8px;
-}
-
-/* Responsive Styles */
-@media screen and (max-width: 767px) {
-  .card-container > *:not(.circle-link) ,
-  .terminal {
-    width: 100%;
-  }
-
-  .card:not(.highlight-card) {
-    height: 16px;
-    margin: 8px 0;
-  }
-
-  .card.highlight-card span {
-    margin-left: 72px;
-  }
 }

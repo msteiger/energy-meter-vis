@@ -1,8 +1,7 @@
 
 <app-banner *ngIf="error">{{error}}</app-banner>
 
-<div *ngIf="!error">
-  <div class="content">
+  <div *ngIf="!error" class="content">
     <div class="row" style="display: flex; align-items: center; align-content: center;">
       <mat-spinner
         *ngIf="getLoadingFactor() < 100"
@@ -32,5 +31,4 @@
 
     <app-chart-view #heatingChart [colors]="heatingColors"></app-chart-view>
   </div>
-</div>
 

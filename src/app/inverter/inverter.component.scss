@@ -17,5 +17,7 @@ app-chart-view {
 .content {
   display: flex;
   flex-direction: column;
-  width: 960px;
+  min-width: 720px;
+  max-width: 1280px;
+  width: 100%;
 }
