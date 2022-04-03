@@ -19,8 +19,8 @@ export class OverlayComponent implements OnInit {
   @Input('color')
   color = '#eeec';
 
-  @Input('margin')
-  margin = '50px 50px auto auto';
+  @Input('offset')
+  offset = '50px';
 
   asIs() { return 0; }
 }

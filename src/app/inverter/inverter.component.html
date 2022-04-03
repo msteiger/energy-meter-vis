@@ -21,13 +21,15 @@
       </app-range-picker>
     </div>
 
-    <app-overlay color="#dada1580" margin='50px 50px auto auto' [content]="inverterInfo">
+    <div class="overlay-container">
+      <app-overlay color="#dada1580" [content]="inverterInfo"></app-overlay>
       <app-chart-view #inverterChart [colors]="inverterColors"></app-chart-view>
-    </app-overlay>
+    </div>
 
-    <app-overlay color="#ccc8" margin='50px 50px auto auto' [content]="electricInfo">
+    <div class="overlay-container">
+      <app-overlay color="#ccc8" [content]="electricInfo"></app-overlay>
       <app-chart-view #electricChart [colors]="electricColors"></app-chart-view>
-    </app-overlay>
+    </div>
 
     <app-chart-view #heatingChart [colors]="heatingColors"></app-chart-view>
   </div>
