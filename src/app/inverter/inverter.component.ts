@@ -41,8 +41,8 @@ export class InverterComponent implements OnInit, AfterContentInit, AfterViewIni
   inverterInfo = new Map();
   electricInfo = new Map();
 
-  constructor(public dataService: DataService, private router: Router, private route: ActivatedRoute) {
-
+  constructor(public dataService: DataService, private router: Router,  private route: ActivatedRoute) {
+      // empty
   }
 
   ngAfterViewInit(): void {
