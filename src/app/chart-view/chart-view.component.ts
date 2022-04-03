@@ -15,20 +15,26 @@ export class ChartViewComponent implements OnInit {
 //  @ViewChild(BaseChartDirective) chart!: BaseChartDirective;
 
   public readonly chartOptions: ChartConfiguration['options'] = {
-//    animation: false,
     animations: {
-      x: {
-        duration: 500,
-        easing: "easeOutBack",
-        from: (ctx: ScriptableContext<'line'> | any) => {
-          if (ctx.type === 'data' && ctx.mode === 'default') {
-            return (ctx.element.x) + ctx.chart.chartArea.width * this.slideDirection;
-          }
-          return undefined;
-        }
-      },
       y: {
         duration: 0
+      },
+      colors: false
+    },
+    transitions: {
+      'default': {
+        animations: {
+          x: {
+            duration: 500,
+            easing: "easeOutBack",
+            from: (ctx: ScriptableContext<'line'> | any) => {
+              if (ctx.type === 'data' && ctx.mode === 'default') {
+                return (ctx.element.x) + ctx.chart.chartArea.width * this.slideDirection;
+              }
+              return undefined;
+            }
+          }
+        }
       }
     },
     responsive: true,
