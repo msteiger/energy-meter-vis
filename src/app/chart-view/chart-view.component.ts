@@ -12,7 +12,14 @@ import { TimeFrame } from '../time-frame';
 })
 export class ChartViewComponent implements OnInit {
 
-//  @ViewChild(BaseChartDirective) chart!: BaseChartDirective;
+  @ViewChild(BaseChartDirective) chart!: BaseChartDirective;
+
+  slidePosFunc = (ctx: ScriptableContext<'line'> | any) => {
+    if (ctx.type === 'data') {
+      return (ctx.element.x) + ctx.chart.chartArea.width * this.slideDirection;
+    }
+    return undefined;
+  };
 
   public readonly chartOptions: ChartConfiguration['options'] = {
     animations: {
@@ -22,20 +29,25 @@ export class ChartViewComponent implements OnInit {
       colors: false
     },
     transitions: {
+      'hide': {
+        animations: {
+          x: {
+            duration: 750,
+            easing: "easeInQuart",
+            to: this.slidePosFunc
+          }
+        }
+      },
       'default': {
         animations: {
           x: {
-            duration: 500,
-            easing: "easeOutBack",
-            from: (ctx: ScriptableContext<'line'> | any) => {
-              if (ctx.type === 'data' && ctx.mode === 'default') {
-                return (ctx.element.x) + ctx.chart.chartArea.width * this.slideDirection;
-              }
-              return undefined;
-            }
+            duration: 750,
+            easing: "easeOutQuart",
+            from: this.slidePosFunc
           }
         }
-      }
+      },
+
     },
     responsive: true,
     maintainAspectRatio: false,
@@ -104,6 +116,11 @@ export class ChartViewComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  public clearData(delta: number) {
+    this.slideDirection = Math.sign(delta);
+    this.chart.update('hide');
+  }
+
   public setDataArray(measurementData: MeasurementData[], frame: TimeFrame, delta: number, stack?: string[]) {
 
     this.setTimeframe(frame);
@@ -144,9 +161,7 @@ export class ChartViewComponent implements OnInit {
     xScale.min = minX;
     xScale.max = maxX;
 
-    this.chartData = {
-      datasets: []
-    }
+    const datasets =  [];
 
     for (const [idx, item] of measurementData.entries()) {
       let sameStack;
@@ -155,7 +170,7 @@ export class ChartViewComponent implements OnInit {
       } else {
         sameStack = idx > 0;
       }
-      this.chartData.datasets.push(
+      datasets.push(
       {
           fill: sameStack ? '-1' : 'origin',
           stack: stack ? stack[idx] : undefined,
@@ -172,6 +187,10 @@ export class ChartViewComponent implements OnInit {
           hoverBackgroundColor: this.colors[idx] + this.primaryAlpha,
           tension: 0.2
       });
+    }
+
+    this.chartData = {
+      datasets: datasets
     }
   }
 

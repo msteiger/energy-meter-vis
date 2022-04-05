@@ -143,6 +143,8 @@ export class InverterComponent implements OnInit, AfterContentInit, AfterViewIni
   }
 
   private loadInverterAndHeaterData(delta: number, date?: string) {
+    this.inverterChartView?.clearData(-delta);
+
     const invData$ = this.dataService.getInverter(this.range, date);
     const heaterData$ = this.dataService.getHeaterPower(this.range, date);
 
@@ -156,6 +158,8 @@ export class InverterComponent implements OnInit, AfterContentInit, AfterViewIni
   }
 
   private loadElectricData(delta: number, date?: string) {
+    this.electricChartView?.clearData(-delta);
+
     let lOut$ = this.dataService.getEmPowerOut(this.range, date);
     let l1$ = this.dataService.getEmPowerIn(this.range, date, 1);
     let l2$ = this.dataService.getEmPowerIn(this.range, date, 2);
@@ -168,6 +172,8 @@ export class InverterComponent implements OnInit, AfterContentInit, AfterViewIni
   }
 
   private loadHeatingData(delta: number, date?: string) {
+    this.heatingChartView?.clearData(-delta);
+
     const data1$ = this.dataService.getHeating(this.range, 'extern', date);
     const data2$ = this.dataService.getHeating(this.range, 'boiler', date);
     const data3$ = this.dataService.getHeating(this.range, 'kessel', date);
