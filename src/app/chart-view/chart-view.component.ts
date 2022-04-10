@@ -1,6 +1,6 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {BaseChartDirective } from "ng2-charts";
-import {Chart, ChartConfiguration, ChartData, ChartType, Color, ScriptableContext, Tick, TimeScaleOptions, TimeUnit, Tooltip, TooltipItem} from "chart.js";
+import {Chart, ChartConfiguration, ChartData, ChartDataset, ChartType, Color, ScriptableContext, Tick, TimeScaleOptions, TimeUnit, TooltipItem} from "chart.js";
 import {Measurement, MeasurementData} from "../data-service.service";
 import {LineHoverPlugin} from "./lineHoverPlugin";
 import { TimeFrame } from '../time-frame';
@@ -96,7 +96,8 @@ export class ChartViewComponent implements OnInit {
 
   chartPlugins = [];
   chartType: ChartType = 'line';
-  chartData?: ChartData<'line'>;
+  chartData: ChartData<'line'> = { datasets: [] };
+  overlayData?: ChartDataset<'line'>;
 
   @Input('colors') colors = ['#20e020', '#f0e020', '#f04040'];
 
@@ -189,6 +190,10 @@ export class ChartViewComponent implements OnInit {
       });
     }
 
+    if (this.overlayData) {
+      datasets.push(this.overlayData);
+    }
+
     this.chartData = {
       datasets: datasets
     }
@@ -220,5 +225,25 @@ export class ChartViewComponent implements OnInit {
 
     xScale.time.unit = unit;
     xScale.time.tooltipFormat = tooltipFormat;
+  }
+
+  public setOverlayData(data: Measurement[], label: string) {
+    if (!data) {
+      this.overlayData = undefined;
+    }
+
+    this.overlayData = {
+      fill: false,
+      stack: 'overlays',
+      label: label,
+      data: data,
+      borderWidth: 1,
+      pointRadius: 0,
+      borderColor: "black",
+      tension: 0.2
+    }
+
+    this.chartData.datasets.splice(0, 0, this.overlayData);
+    this.chart.update();
   }
 }

@@ -1,5 +1,5 @@
 import {AfterContentInit, AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
-import {DataService, MeasurementData, StatsData} from "../data-service.service";
+import {DataService, Measurement, MeasurementData, StatsData} from "../data-service.service";
 import {ChartViewComponent} from "../chart-view/chart-view.component";
 import { TimeFrame } from '../time-frame';
 import {zip} from "rxjs";
@@ -164,11 +164,17 @@ export class InverterComponent implements OnInit, AfterContentInit, AfterViewIni
     let l1$ = this.dataService.getEmPowerIn(this.range, date, 1);
     let l2$ = this.dataService.getEmPowerIn(this.range, date, 2);
     let l3$ = this.dataService.getEmPowerIn(this.range, date, 3);
+    let lIn$ = this.dataService.getEmPowerIn(this.range, date);
 
     zip(lOut$, l1$, l2$, l3$).subscribe({
         next: values => this.electricChartView.setDataArray(values, this.range, delta, ['out', 'in', 'in', 'in']),
         error: error => this.error = error.statusText + " (" + error.status + ") - " + error.error,
-      });
+    });
+
+    zip(lOut$, lIn$).subscribe({
+        next: values => this.electricChartView.setOverlayData(this.combine(values[0].data, values[1].data), "Absolute"),
+        error: error => this.error = error.statusText + " (" + error.status + ") - " + error.error,
+    });
   }
 
   private loadHeatingData(delta: number, date?: string) {
@@ -215,4 +221,11 @@ export class InverterComponent implements OnInit, AfterContentInit, AfterViewIni
     return 100 * (1 - count / maxCount);
   }
 
+  private combine(dataA: Measurement[], dataB: Measurement[]): Measurement[] {
+    // fails if X is different or number of elements is different
+    return dataA.map((a, i) => {
+      const b = dataB[i];
+      return {x: a.x, y:a.y + b.y, measurements: a.measurements + b.measurements };
+    });
+  }
 }
