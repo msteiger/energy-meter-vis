@@ -17,11 +17,15 @@ app-chart-view {
 .content {
   display: flex;
   flex-direction: column;
-  min-width: 720px;
+  min-width: 650px;
   max-width: 1280px;
   width: 100%;
 }
 
 .overlay-container {
   position: relative;
+}
+
+::ng-deep #spinner-background circle {
+  stroke: #ccc;
 }

@@ -4,6 +4,11 @@
   <div *ngIf="!error" class="content">
     <div class="row" style="display: flex; align-items: center; align-content: center;">
       <mat-spinner
+        id="spinner-background"
+        value=100 diameter="32"
+        mode="determinate">
+      </mat-spinner>
+      <mat-spinner
         *ngIf="getLoadingFactor() < 100"
         [value]=getLoadingFactor()
         style="position: absolute;"
