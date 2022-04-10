@@ -62,12 +62,14 @@ export class DataService {
   }
 
   public getEmPowerOut(range: TimeFrame, date?: string): Observable<MeasurementData> {
-    return this.getEmPower(false, range, date).pipe(map(data => this.negateValues(data)));
+    return this.getEmPower(false, range, date)
+      .pipe(map(data => this.negateValues(data)))
+      .pipe(map(data => { data.desc.min *= 0.5; return data; }));
   }
 
   public getEmPowerIn(range: TimeFrame, date?: string, idx?: number): Observable<MeasurementData> {
     return this.getEmPower(true, range, date, idx).pipe(map(mmtData => {
-      mmtData.desc.max *= 0.5; // the sum is 3x the maximum = 7.5k, which is way too much
+      mmtData.desc.max *= 0.4; // the sum is 3x the maximum = 7.5k, which is way too much
       return mmtData;
     }));
   }
