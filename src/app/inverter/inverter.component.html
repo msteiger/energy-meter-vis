@@ -16,6 +16,7 @@
         mode="determinate">
       </mat-spinner>
       <app-date-picker
+        [disabled]="getLoadingFactor() < 100"
         [currentValue]="currentDate"
         [prevValue]="prevDate"
         [nextValue]="nextDate"

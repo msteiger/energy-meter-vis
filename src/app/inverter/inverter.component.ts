@@ -23,6 +23,8 @@ export class InverterComponent implements OnInit, AfterContentInit, AfterViewIni
 
   error?: string;
 
+  maxLoadingCount = 0;
+
   savedDates = new Map<TimeFrame, string>();
 
   currentDate: string = 'trigger-reload';
@@ -218,8 +220,10 @@ export class InverterComponent implements OnInit, AfterContentInit, AfterViewIni
 
   public getLoadingFactor(): number {
     const count = this.dataService.getLoadingCount();
-    const maxCount = 8;
-    return 100 * (1 - count / maxCount);
+    if (count > this.maxLoadingCount) {
+      this.maxLoadingCount = count;
+    }
+    return 100 * (1 - count / this.maxLoadingCount);
   }
 
   private combine(dataA: Measurement[], dataB: Measurement[]): Measurement[] {

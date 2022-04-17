@@ -1,7 +1,7 @@
 <button
   #prevButton
   mat-stroked-button color="primary"
-  [disabled]="!prevValue"
+  [disabled]="disabled || !prevValue"
   [title]="prevValue"
   (click)="gotoValue(-1)">
   <mat-icon>arrow_back</mat-icon>Prev
@@ -20,10 +20,10 @@
   #nextButton
   mat-stroked-button
   color="primary"
-  [disabled]="!nextValue"
+  [disabled]="disabled || !nextValue"
   [title]="nextValue"
   (click)="gotoValue(+1)">
   Next<mat-icon>arrow_forward</mat-icon>
 </button>
 
-<mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+<mat-datepicker-toggle [disabled]="disabled" matSuffix [for]="picker"></mat-datepicker-toggle>

@@ -16,6 +16,8 @@ export class DatePickerComponent implements OnInit {
 
   constructor() { }
 
+  @Input('disabled') disabled = false;
+
   @Input() currentValue?: string;
   @Input() prevValue?: string;
   @Input() nextValue?: string;
