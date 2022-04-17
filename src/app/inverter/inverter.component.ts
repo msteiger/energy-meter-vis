@@ -6,6 +6,7 @@ import {zip} from "rxjs";
 import 'chartjs-adapter-date-fns';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RangePickerComponent } from '../range-picker/range-picker.component';
+import { delay } from 'rxjs/operators';
 
 
 @Component({
@@ -171,7 +172,7 @@ export class InverterComponent implements OnInit, AfterContentInit, AfterViewIni
         error: error => this.error = error.statusText + " (" + error.status + ") - " + error.error,
     });
 
-    zip(lOut$, lIn$).subscribe({
+    zip(lOut$, lIn$).pipe(delay(1000)).subscribe({       // delay 1000ms to ensure that the slide-in animation has finished
         next: values => this.electricChartView.setOverlayData(this.combine(values[0].data, values[1].data), "Absolute"),
         error: error => this.error = error.statusText + " (" + error.status + ") - " + error.error,
     });

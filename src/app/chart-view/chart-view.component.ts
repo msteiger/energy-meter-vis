@@ -16,7 +16,7 @@ export class ChartViewComponent implements OnInit {
 
   slidePosFunc = (ctx: ScriptableContext<'line'> | any) => {
     if (ctx.type === 'data') {
-      return (ctx.element.x) + ctx.chart.chartArea.width * this.slideDirection;
+      return (ctx.element.x) + (ctx.chart.chartArea.width + 10) * this.slideDirection;  // add 10px to ensure the last point is also outside
     }
     return undefined;
   };
@@ -190,9 +190,7 @@ export class ChartViewComponent implements OnInit {
       });
     }
 
-    if (this.overlayData) {
-      datasets.push(this.overlayData);
-    }
+    this.overlayData = undefined;
 
     this.chartData = {
       datasets: datasets
@@ -228,10 +226,6 @@ export class ChartViewComponent implements OnInit {
   }
 
   public setOverlayData(data: Measurement[], label: string) {
-    if (!data) {
-      this.overlayData = undefined;
-    }
-
     this.overlayData = {
       fill: false,
       stack: 'overlays',
@@ -244,6 +238,6 @@ export class ChartViewComponent implements OnInit {
     }
 
     this.chartData.datasets.splice(0, 0, this.overlayData);
-    this.chart.update();
+    this.chart.update('silent');
   }
 }
