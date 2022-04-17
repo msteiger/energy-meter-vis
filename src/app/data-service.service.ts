@@ -57,6 +57,10 @@ export class DataService {
     return this.getData('inverter-ac-power', range, date);
   }
 
+  public getHeaterStats(date?: string): Observable<StatsData> {
+    return this.getStats('heater-power', date);
+  }
+
   public getHeaterPower(range: TimeFrame, date?: string): Observable<MeasurementData> {
     return this.getData('heater-power', range, date);
   }
@@ -100,7 +104,7 @@ export class DataService {
 
     this.loading++;
 
-    let data$ = this.getRealData(id, frame, date);
+    let data$ = this.loadData(id, frame, date);
 
     if (range == TimeFrame.MONTHLY && !id.startsWith("heating-")) {
       data$ = data$.pipe(map(this.avgToSum));
@@ -114,19 +118,7 @@ export class DataService {
     return data$;
   }
 
-  private getMockData(id: string, frame: string, date?: string): Observable<MeasurementData> {
-    const root = 'assets/data'
-
-    if (date) {
-      date = '_' + date;
-    }
-
-    const url = root + '/' + frame + '/' + id + date + '.json';
-
-    return this.http.get<MeasurementData>(url);
-  }
-
-  private getRealData(id: string, frame: string, date?: string): Observable<MeasurementData> {
+  private loadData(id: string, frame: string, date?: string): Observable<MeasurementData> {
 
     let params = new HttpParams();
 

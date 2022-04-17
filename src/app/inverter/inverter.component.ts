@@ -42,6 +42,7 @@ export class InverterComponent implements OnInit, AfterContentInit, AfterViewIni
   private regexMonthly = new RegExp('^(20[0-9]{2})-(0[1-9]|1[012])$');
 
   inverterInfo = new Map();
+  heaterInfo = new Map();
   electricInfo = new Map();
 
   constructor(public dataService: DataService, private router: Router,  private route: ActivatedRoute) {
@@ -126,6 +127,7 @@ export class InverterComponent implements OnInit, AfterContentInit, AfterViewIni
 
   loadInfoBoxData(date?: string) {
     this.inverterInfo.clear();
+    this.heaterInfo.clear();
     this.electricInfo.clear();
 
     if (this.range != TimeFrame.DAILY) {
@@ -137,6 +139,11 @@ export class InverterComponent implements OnInit, AfterContentInit, AfterViewIni
 
     inv$.subscribe( {
       next: value => this.updateInverterInfoBox(value) });
+
+    const heater$ = this.dataService.getHeaterStats(date);
+
+    heater$.subscribe( {
+        next: value => this.updateHeaterInfoBox(value) });
 
     this.electricInfo.clear();
     const in$ = this.dataService.getEmPowerStats('in', date);
@@ -207,6 +214,12 @@ export class InverterComponent implements OnInit, AfterContentInit, AfterViewIni
     this.inverterInfo.set('Today', this.toKwh(stats.today));
     this.inverterInfo.set('30 Days', this.toKwh(stats.last30Days));
     this.inverterInfo.set('This Year', this.toKwh(stats.yearToDate));
+  };
+
+  private updateHeaterInfoBox(stats: StatsData) {
+    this.heaterInfo.set('Today', this.toKwh(stats.today));
+    this.heaterInfo.set('30 Days', this.toKwh(stats.last30Days));
+    this.heaterInfo.set('This Year', this.toKwh(stats.yearToDate));
   };
 
   private updateElectricInfoBox(statsIn: StatsData, statsOut: StatsData) {
