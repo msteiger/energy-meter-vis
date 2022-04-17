@@ -20,7 +20,7 @@ export class OverlayComponent implements OnInit {
   color = '#eeec';
 
   @Input('offset')
-  offset = '50px';
+  offset = '20px';
 
   asIs() { return 0; }
 }

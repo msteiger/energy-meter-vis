@@ -126,6 +126,7 @@ export class InverterComponent implements OnInit, AfterContentInit, AfterViewIni
 
   loadInfoBoxData(date?: string) {
     this.inverterInfo.clear();
+    this.electricInfo.clear();
 
     if (this.range != TimeFrame.DAILY) {
       // we have stats only for daily frames
