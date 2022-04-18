@@ -203,10 +203,10 @@ export class InverterComponent implements OnInit, AfterContentInit, AfterViewIni
 
   private updateView(data?: MeasurementData) {
     if (data) {
-      this.router.navigate([], { queryParams: { date: data.current.substring(0, 16) }})
-
-      this.nextDate = data.next ? data.next.substring(0, 16) : '';
-      this.prevDate = data.prev ? data.prev.substring(0, 16) : '';
+      this.router.navigate([], { queryParams: { date: data.current }})
+      this.currentDate = data.current;
+      this.nextDate = data.next ? data.next : '';
+      this.prevDate = data.prev ? data.prev : '';
     }
   }
 
