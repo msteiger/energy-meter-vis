@@ -17,6 +17,7 @@ export interface MeasurementData {
   current: string,
   prev?: string,
   next?: string
+  maxGapWidth?: number,
   data: Measurement[]
 }
 
@@ -96,7 +97,11 @@ export class DataService {
 
   public getHeating(range: TimeFrame, id: string, date?: string): Observable<MeasurementData> {
     const fullId = 'heating-' + id;
-    return this.getData(fullId, range, date);
+    return this.getData(fullId, range, date)
+      .pipe(map(data => {
+        data.maxGapWidth = 2 * 3600 * 1000;
+        return data;
+      }));
   }
 
   private getData(id: string, range: TimeFrame, date?: string): Observable<MeasurementData> {

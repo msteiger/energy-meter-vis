@@ -103,8 +103,6 @@ export class ChartViewComponent implements OnInit {
 
   private slideDirection = 0;
 
-  private toleratedGapWidth = 0;
-
   private primaryAlpha: string = 'ff';
   private secondaryAlpha: string = 'b0';
   private borderColor: Color = '#A0A0A0'
@@ -124,7 +122,7 @@ export class ChartViewComponent implements OnInit {
 
   public setDataArray(measurementData: MeasurementData[], frame: TimeFrame, delta: number, stack?: string[]) {
 
-    this.setTimeframe(frame);
+    this.setTimeframeScale(frame);
     this.slideDirection = delta;
 
     const minX = Math.min(...measurementData.map(obj => obj.start));
@@ -177,7 +175,7 @@ export class ChartViewComponent implements OnInit {
           stack: stack ? stack[idx] : undefined,
           label: item.desc.name,
           data: item.data,
-          spanGaps: this.toleratedGapWidth,
+          spanGaps: item.maxGapWidth ? item.maxGapWidth : this.getGapWidth(frame),
           borderWidth: 2,
           pointBorderWidth: 1,
           pointBorderColor: this.borderColor,
@@ -197,7 +195,18 @@ export class ChartViewComponent implements OnInit {
     }
   }
 
-  public setTimeframe(frame: TimeFrame) {
+  public getGapWidth(frame: TimeFrame): number {
+    switch (frame) {
+      case TimeFrame.HOURLY:
+        return 1 * 60 * 1000;
+      case TimeFrame.DAILY:
+        return 15 * 60 * 1000;
+      case TimeFrame.MONTHLY:
+        return 24 * 60 * 60 * 1000;
+    }
+  }
+
+  public setTimeframeScale(frame: TimeFrame) {
     let unit: TimeUnit;
     let tooltipFormat;
 
@@ -205,17 +214,14 @@ export class ChartViewComponent implements OnInit {
       case TimeFrame.HOURLY:
         unit = "minute"
         tooltipFormat = 'HH:mm'
-        this.toleratedGapWidth = 2 * 60 * 1000; // tolerate 1 missing entry
         break;
       case TimeFrame.DAILY:
         unit = "hour"
         tooltipFormat = 'HH:mm'
-        this.toleratedGapWidth = 15 * 60 * 1000;
         break;
       case TimeFrame.MONTHLY:
         unit = "day"
         tooltipFormat = 'yyyy-MM-dd'
-        this.toleratedGapWidth = 24 * 60 * 60 * 1000;
         break;
     }
 
