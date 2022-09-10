@@ -6,6 +6,13 @@ button {
 input {
   cursor: default;
   color:black;
+  width: 110px;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+@media (min-width:700px) {
+  input { width: 180px; }
 }
 
 input::selection {
