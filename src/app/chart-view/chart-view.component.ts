@@ -130,7 +130,6 @@ export class ChartViewComponent implements OnInit {
 
     const minY = Math.min(0, ...measurementData.map(obj => obj.desc.min));
     const maxY = Math.max(0, ...measurementData.map(obj => obj.desc.max));
-    const sumY = measurementData.map(obj => obj.desc.max).reduce((a, b) => a + b, 0);
 
     const yScale = this.chartOptions!.scales!.y!;  // TODO: check why compiler complains
     const xScale = this.chartOptions!.scales!.x!;  // TODO: check why compiler complains
@@ -155,7 +154,7 @@ export class ChartViewComponent implements OnInit {
     // @ts-ignore
     yScale.stacked = stack;  // TODO: check why needs to be forced
     yScale.min = minY;
-    yScale.max = (stack) ? sumY : maxY;
+    yScale.max = (stack) ? this.computeMaxY(measurementData, stack) : maxY;
 
     xScale.min = minX;
     xScale.max = maxX;
@@ -176,6 +175,7 @@ export class ChartViewComponent implements OnInit {
           label: item.desc.name,
           data: item.data,
           spanGaps: item.maxGapWidth ? item.maxGapWidth : this.getGapWidth(frame),
+          pointRadius: 2,
           borderWidth: 2,
           pointBorderWidth: 1,
           pointBorderColor: this.borderColor,
@@ -245,5 +245,19 @@ export class ChartViewComponent implements OnInit {
 
     this.chartData.datasets.splice(0, 0, this.overlayData);
     this.chart.update('silent');
+  }
+
+  private computeMaxY(measurementData: MeasurementData[], stack: string[]): number {
+    const sums = new Map<string, number>();
+    for (const [idx, item] of measurementData.entries()) {
+      const name = stack[idx];
+      const newVal = item.desc.max + (sums.get(name) ?? 0);
+      sums.set(name, newVal);
+    }
+    console.log(sums);
+    const array = Array.from(sums.values());
+    return Math.max(...array);
+
+//    const sumY = measurementData.map(obj => obj.desc.max).reduce((a, b) => a + b, 0);
   }
 }

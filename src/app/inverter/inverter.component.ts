@@ -33,7 +33,7 @@ export class InverterComponent implements OnInit, AfterContentInit, AfterViewIni
 
   range: TimeFrame = TimeFrame.DAILY;
 
-  inverterColors = ['#9fdaba', '#dada15'];
+  inverterColors = ['#9fdaba', '#dada15', '#da9a15', '#9ada15'];
   electricColors = ['#dada15', '#B1B15D', '#93D193', '#ee80a6'];
   heatingColors = ['#7373A1', '#6799ec', '#71bad5'];
 
@@ -157,11 +157,13 @@ export class InverterComponent implements OnInit, AfterContentInit, AfterViewIni
     this.inverterChartView?.clearData(-delta);
 
     const invData$ = this.dataService.getInverter(this.range, date);
+    const deyeData1$ = this.dataService.getDeyeInverter(this.range, date, "east");
+    const deyeData2$ = this.dataService.getDeyeInverter(this.range, date, "west");
     const heaterData$ = this.dataService.getHeaterPower(this.range, date);
 
-    zip(heaterData$, invData$).subscribe({
+    zip(heaterData$, invData$, deyeData1$, deyeData2$).subscribe({
       next: value => {
-        this.inverterChartView.setDataArray(value, this.range, delta);
+        this.inverterChartView.setDataArray(value, this.range, delta, ['heater', 'inv', 'inv', 'inv']);
         this.updateView(value[1]); // use invData to compute next/prev time range
       },
       error: error => this.error = error.statusText + " (" + error.status + ") - " + error.error,
