@@ -198,7 +198,7 @@ export class ChartViewComponent implements OnInit {
   public getGapWidth(frame: TimeFrame): number {
     switch (frame) {
       case TimeFrame.HOURLY:
-        return 1 * 60 * 1000;
+        return 3 * 60 * 1000;  // max two missing frames are tolerated
       case TimeFrame.DAILY:
         return 15 * 60 * 1000;
       case TimeFrame.MONTHLY:
@@ -254,7 +254,7 @@ export class ChartViewComponent implements OnInit {
       const newVal = item.desc.max + (sums.get(name) ?? 0);
       sums.set(name, newVal);
     }
-    console.log(sums);
+
     const array = Array.from(sums.values());
     return Math.max(...array);
 
