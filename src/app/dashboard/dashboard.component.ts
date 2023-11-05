@@ -136,9 +136,12 @@ export class DashboardComponent implements OnInit, AfterContentInit, AfterViewIn
     }
 
     const inv$ = this.dataService.getInverterStats(date);
+    const deye1$ = this.dataService.getDeyeInverterStats(date, "east");
+    const deye2$ = this.dataService.getDeyeInverterStats(date, "west");
 
-    inv$.subscribe( {
-      next: value => this.updateInverterInfoBox(value) });
+    zip(inv$, deye1$, deye2$).subscribe( {
+      next: value => this.updateInverterInfoBox(value[0], value[1], value[2])
+    });
 
     const heater$ = this.dataService.getHeaterStats(date);
 
@@ -212,10 +215,10 @@ export class DashboardComponent implements OnInit, AfterContentInit, AfterViewIn
     }
   }
 
-  private updateInverterInfoBox(stats: StatsData) {
-    this.inverterInfo.set('Today', this.toKwh(stats.today));
-    this.inverterInfo.set('30 Days', this.toKwh(stats.last30Days));
-    this.inverterInfo.set('This Year', this.toKwh(stats.yearToDate));
+  private updateInverterInfoBox(stats: StatsData, statsExtra1 : StatsData, statsExtra2: StatsData) {
+    this.inverterInfo.set('Today', this.toKwhExtra(stats.today, statsExtra1.today + statsExtra2.today));
+    this.inverterInfo.set('30 Days', this.toKwhExtra(stats.last30Days, statsExtra1.last30Days + statsExtra2.last30Days, 0));
+    this.inverterInfo.set('This Year', this.toKwhExtra(stats.yearToDate, statsExtra1.yearToDate + statsExtra2.yearToDate, 0));
   };
 
   private updateHeaterInfoBox(stats: StatsData) {
@@ -230,8 +233,16 @@ export class DashboardComponent implements OnInit, AfterContentInit, AfterViewIn
     this.electricInfo.set('This Year', this.toKwh(statsIn.yearToDate) + ' / ' + this.toKwh(statsOut.yearToDate));
   };
 
-  private toKwh(watt: number) {
-    return (watt / 1000).toFixed(1) + ' kWh';
+  private toKwhShort(watt: number, precision?: number) {
+    return (watt / 1000).toFixed(precision ?? 1);
+  }
+
+  private toKwh(watt: number, precision?: number) {
+    return this.toKwhShort(watt, precision) + ' kWh';
+  }
+
+  private toKwhExtra(watt: number, wattExtra: number, precision?: number) {
+    return this.toKwhShort(watt, precision) + ' + ' + this.toKwh(wattExtra, precision);
   }
 
   public getLoadingFactor(): number {

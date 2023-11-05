@@ -50,6 +50,10 @@ export class DataService {
     return this.loading;
   }
 
+  public getDeyeInverterStats(date?: string, id?: string): Observable<StatsData> {
+    return this.getStats('deye-ac-power-' + id, date);
+  }
+
   public getDeyeInverter(range: TimeFrame, date?: string, id?: string): Observable<MeasurementData> {
     return this.getData('deye-ac-power-' + id, range, date);
   }
