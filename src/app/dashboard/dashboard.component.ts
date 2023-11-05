@@ -217,8 +217,8 @@ export class DashboardComponent implements OnInit, AfterContentInit, AfterViewIn
 
   private updateInverterInfoBox(stats: StatsData, statsExtra1 : StatsData, statsExtra2: StatsData) {
     this.inverterInfo.set('Today', this.toKwhExtra(stats.today, statsExtra1.today + statsExtra2.today));
-    this.inverterInfo.set('30 Days', this.toKwhExtra(stats.last30Days, statsExtra1.last30Days + statsExtra2.last30Days, 0));
-    this.inverterInfo.set('This Year', this.toKwhExtra(stats.yearToDate, statsExtra1.yearToDate + statsExtra2.yearToDate, 0));
+    this.inverterInfo.set('30 Days', this.toKwhExtra(stats.last30Days, statsExtra1.last30Days + statsExtra2.last30Days));
+    this.inverterInfo.set('This Year', this.toKwhExtra(stats.yearToDate, statsExtra1.yearToDate + statsExtra2.yearToDate));
   };
 
   private updateHeaterInfoBox(stats: StatsData) {
