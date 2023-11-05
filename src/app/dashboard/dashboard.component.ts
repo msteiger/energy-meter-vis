@@ -10,11 +10,11 @@ import { delay } from 'rxjs/operators';
 
 
 @Component({
-  selector: 'app-inverter',
-  templateUrl: './inverter.component.html',
-  styleUrls: ['./inverter.component.scss']
+  selector: 'app-dashboard',
+  templateUrl: './dashboard.component.html',
+  styleUrls: ['./dashboard.component.scss']
 })
-export class InverterComponent implements OnInit, AfterContentInit, AfterViewInit  {
+export class DashboardComponent implements OnInit, AfterContentInit, AfterViewInit  {
 
   @ViewChild('inverterChart') private inverterChartView!: ChartViewComponent;
   @ViewChild('electricChart') private electricChartView!: ChartViewComponent;

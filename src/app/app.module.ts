@@ -7,7 +7,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { NgChartsModule } from 'ng2-charts';
 import { BannerComponent } from './banner/banner.component';
-import { InverterComponent } from './inverter/inverter.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
 import { DatePickerComponent } from './date-picker/date-picker.component';
 import { MatTabsModule } from "@angular/material/tabs";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
@@ -26,7 +26,7 @@ import { OverlayComponent } from './overlay/overlay.component';
     AppComponent,
     ChartViewComponent,
     BannerComponent,
-    InverterComponent,
+    DashboardComponent,
     DatePickerComponent,
     RangePickerComponent,
     OverlayComponent

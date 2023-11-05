@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import {InverterComponent} from "./inverter/inverter.component";
+import {DashboardComponent} from "./dashboard/dashboard.component";
 
 const routes: Routes = [
-  { path: 'dashboard', component:  InverterComponent},
+  { path: 'dashboard', component:  DashboardComponent},
   { path: '**', redirectTo: '/dashboard', pathMatch: 'full' },
 ];
 
